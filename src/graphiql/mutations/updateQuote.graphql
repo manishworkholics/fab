@@ -1,0 +1,14 @@
+mutation updateQuote($updateQuoteInput: UpdateQuoteInput!, $quoteId: String!) {
+  updateQuote(updateQuoteInput: $updateQuoteInput, quoteId: $quoteId) {
+    quoteId
+    title
+    quoteType
+    description
+    quoteMaterials
+    turnTime
+    quoteFiles
+    status
+    hasNDA
+    quoteName
+  }
+}

@@ -1,0 +1,24 @@
+query DetailedBidByID($bidId: String!) {
+  detailedBid(bidId: $bidId) {
+    id
+    amount
+    bidderId
+    createdAt
+    bidder{
+      id
+      firstName
+      lastName
+      email
+    }
+    additionalNotes
+    projectApproach {
+      relevantExperience
+      technicalApproach
+      estimatedTimeline
+    }
+    pricingBreakdown {
+      description
+      price
+    }
+  }
+}

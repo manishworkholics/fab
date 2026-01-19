@@ -1,0 +1,13 @@
+mutation createQuote($createQuoteInput: CreateQuoteInput!) {
+  createQuote(createQuoteInput: $createQuoteInput) {
+    quoteId
+    title
+    quoteType 
+    description
+    quoteMaterials
+    turnTime
+    quoteFiles 
+    status 
+    hasNDA
+  }
+}

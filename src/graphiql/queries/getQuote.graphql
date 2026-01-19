@@ -1,0 +1,35 @@
+query GetQuote($quoteId: String!) {
+  quote(quoteId: $quoteId) {
+    quoteId
+    title
+    description
+    quoteType
+    quoteMaterials
+    quoteFiles
+    budget
+    turnTime
+    status
+    isArchived
+    createdAt
+    quoteName
+    updatedAt
+    userSignedNDA
+    hasNDA
+    user {
+      id
+      username
+      firstName
+      lastName
+    }
+    assignedEMS {
+      id
+      role
+      username
+    }
+    bids {
+      bidderId
+      amount
+      createdAt
+    }
+  }
+}

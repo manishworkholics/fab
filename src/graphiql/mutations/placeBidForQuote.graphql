@@ -1,0 +1,5 @@
+mutation PlaceBidForQuote($quoteId: String!, $detailedBidInput: DetailedBidInput!) {
+  placeDetailedBid(quoteId: $quoteId, detailedBidInput:$detailedBidInput) {
+    id
+  }
+}

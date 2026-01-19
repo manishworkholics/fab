@@ -1,0 +1,23 @@
+query DetailedBidsForQuote($quoteId: String!) {
+  detailedBidsForQuote(quoteId: $quoteId) {
+    id
+    amount
+    bidderId
+    createdAt
+    bidder{
+      id
+      firstName
+      lastName
+    }
+    additionalNotes
+    projectApproach {
+      relevantExperience
+      technicalApproach
+      estimatedTimeline
+    }
+    pricingBreakdown {
+      description
+      price
+    }
+  }
+}

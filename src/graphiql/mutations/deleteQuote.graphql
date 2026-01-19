@@ -1,0 +1,6 @@
+mutation DeleteQuote($quoteId: String!){
+  deleteQuote(quoteId: $quoteId) {
+    status
+    message
+  }
+}

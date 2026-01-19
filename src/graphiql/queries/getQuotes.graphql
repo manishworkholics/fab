@@ -1,0 +1,43 @@
+query GetQuotes($params: FindAllQuotesInput) {
+  quotes(params: $params) {
+    quotes {
+      quoteId
+      description
+      title
+      quoteMaterials
+      turnTime
+      quoteFiles
+      quoteType
+      status
+      budget
+      assignedEMSId
+      isArchived
+      userSignedNDA
+      quoteName
+      hasNDA
+      bids {
+        bidderId
+        amount
+      }
+      user {
+        id
+        username
+        email
+        firstName
+        lastName
+        phone
+        role
+        profile {
+          id
+          bio
+          location
+          jobRole
+          projectBuildType
+        }
+      }
+      updatedAt
+      createdAt
+    }
+    totalCount
+  }
+}
