@@ -30,23 +30,31 @@ import PurchaseManager from "./pages/Customers/PurchaseManager";
 import DesignEngineers from "./pages/Customers/DesignEngineers";
 import ContractManufacturers from "./pages/Customers/ContractManufacturers";
 import EMSProfile from "./pages/EMSProfile";
- 
+
+import BidComparisonPage from "./pages/Dasboard/pm/rfq/[quoteId]/bids";
+import POPage from "./pages/Dasboard/pm/po/[quoteId]";
+import EMSBidsPage from "./pages/Dasboard/ems/bids";
+
 function App() {
   return (
     <>
       <Routes>
+        <Route path="/pm/rfq/:quoteId/bids" element={<BidComparisonPage />} />
+        <Route path="/pm/po/:quoteId" element={<POPage />} />
+        <Route path="/ems/bids" element={<EMSBidsPage />} />
+
         <Route index element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/talent" element={<Talent />} />
         <Route path="/files" element={<Files />} />
-        <Route path="/ai-agent" element={<AIAgent />} /> 
-        <Route path="/core-market" element={<CoreMarket />} /> 
-        <Route path="/integration" element={<Intergration />} /> 
+        <Route path="/ai-agent" element={<AIAgent />} />
+        <Route path="/core-market" element={<CoreMarket />} />
+        <Route path="/integration" element={<Intergration />} />
         <Route path="/document-generation" element={<DocumentGeneration />} />
-        <Route path="/purchase-manager" element={<PurchaseManager/>} />
-        <Route path="/design-engineer" element={<DesignEngineers/>} />
-        <Route path="/ems-providers" element={<ContractManufacturers/>} />
+        <Route path="/purchase-manager" element={<PurchaseManager />} />
+        <Route path="/design-engineer" element={<DesignEngineers />} />
+        <Route path="/ems-providers" element={<ContractManufacturers />} />
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/quote" element={<Preview />} />

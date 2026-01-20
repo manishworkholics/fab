@@ -71,7 +71,7 @@ export const sideNavData: Item[] = [
     id: 8,
     name: "Community",
     icon: <CommunityIcon />,
-    label: "/community",
+    label: "/bom-checker",
     role: [APP_ROLES.FABS_PM],
   },
   {
