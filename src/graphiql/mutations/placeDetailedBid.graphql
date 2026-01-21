@@ -1,0 +1,7 @@
+mutation PlaceDetailedBid($quoteId: String!, $input: DetailedBidInput!) {
+  placeDetailedBid(quoteId: $quoteId, detailedBidInput: $input) {
+    id
+    amount
+    createdAt
+  }
+}

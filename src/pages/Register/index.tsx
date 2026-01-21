@@ -22,7 +22,6 @@ const Register = () => {
       lastName: "",
       phone: "",
       role: "PM",
-      companyName: "",
       acceptTerms: false,
     },
 
@@ -37,9 +36,6 @@ const Register = () => {
           password: values.password,
           phone: values.phone,
           role: values.role as UserRole,
-
-
-          companyName: values.role === "EMS" ? values.companyName : "",
           acceptTerms: values.acceptTerms,
         });
       } catch (error: unknown) {
@@ -128,7 +124,7 @@ const Register = () => {
             </select>
           </div>
 
-          {formik.values.role === "EMS" && (
+          {/* {formik.values.role === "EMS" && (
             <div className="mt-9">
               <FormInput
                 label="COMPANY NAME"
@@ -140,7 +136,7 @@ const Register = () => {
                 error={formik.touched.companyName && formik.errors.companyName}
               />
             </div>
-          )}
+          )} */}
 
 
           <div className="mt-9">
@@ -185,18 +181,10 @@ const Register = () => {
               styles="w-full"
               position={"center"}
               isLoading={loading}
-            // handleClick={()=>navigate('/quote')}
             />
           </div>
         </form>
-        {/* <div className="flex justify-center items-center gap-2 border mt-9 py-4 rounded-[6px] cursor-pointer">
-          <img src="/images/google-logo.png" className="w-[20px] h-[20px]" />
-          <p className="text-[#344054] text-[16px]">Continue with Google</p>
-        </div>
-        <div className="flex justify-center items-center gap-2 border mt-9 py-4 rounded-[6px] cursor-pointer">
-          <img src="/images/t-logo.png" className="w-[20px] h-[20px]" />
-          <p className="text-[#344054] text-[16px]">Continue with Twitter</p>
-        </div> */}
+
         <div>
           <div className="flex items-center justify-center gap-2 mt-9">
             <p className="text-[#667185] text-[14px]">Not new here?</p>

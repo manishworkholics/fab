@@ -117,9 +117,6 @@ export const RegistrationSchema = yup.object().shape({
 
   role: yup.string().required(),
 
-  companyName: yup.string().when("role", {
-    is: "EMS",
-    then: (schema) => schema.required("Company name is required"),
-  }),
+
 
 });

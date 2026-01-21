@@ -23,12 +23,12 @@ export default function QuoteForm({ handleStepChange, activeStep }: QuoteFormPro
       try {
         addToLocalStorage("quoteData", values, "merge")
         navigate('/ems/manage-quote')
-				await handleQuote({ ...values });
-			} catch (error: unknown) {
-				const errorMessage =
-					error instanceof Error ? error?.message : 'Quote creation failed';
-				toast.error(errorMessage);
-			}
+        await handleQuote({ ...values });
+      } catch (error: unknown) {
+        const errorMessage =
+          error instanceof Error ? error?.message : 'Quote creation failed';
+        toast.error(errorMessage);
+      }
     },
   });
 
@@ -36,9 +36,9 @@ export default function QuoteForm({ handleStepChange, activeStep }: QuoteFormPro
     <div className="max-w-[50%]">
       <FormikProvider value={formik}>
         <Form onSubmit={formik.handleSubmit}>
-        {activeStep === 1 && <QuoteStepOne handleStepChange={handleStepChange} />}
-        {activeStep === 2 && <QuoteStepTwo handleStepChange={handleStepChange} />}
-        {activeStep === 3 && <QuoteStepThree handleStepChange={handleStepChange} />}
+          {activeStep === 1 && <QuoteStepOne handleStepChange={handleStepChange} />}
+          {activeStep === 2 && <QuoteStepTwo handleStepChange={handleStepChange} />}
+          {activeStep === 3 && <QuoteStepThree handleStepChange={handleStepChange} />}
         </Form>
       </FormikProvider>
     </div>

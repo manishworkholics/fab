@@ -29,6 +29,9 @@ const EMSProfile = () => {
     onSubmit: async (values) => {
       const success = await completeProfile(values);
       if (success) navigate("/dashboard");
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     },
   });
 

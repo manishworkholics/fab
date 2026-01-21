@@ -8,17 +8,30 @@ interface userProp {
   firstName: string;
   lastName: string;
 }
+
 interface QuoteCardProps {
-  title: string;
-  company: string;
-  location: string;
-  quantity: string;
-  user: userProp;
-  budget: number;
-  rating: string;
-  quotesCount: number;
   quoteId: string;
-  quoteMaterials: string[];
+  title: string;
+
+  // PM browse fields (optional for EMS tabs)
+  company?: string;
+  location?: string;
+  quantity?: string;
+  user?: userProp;
+  budget?: number;
+  rating?: string;
+  quotesCount?: number;
+  quoteMaterials?: string[];
+
+  // EMS fields
+  status?: string;
+  price?: number;
+  submittedAt?: string;
+  createdAt?: string;
+
+  // UI flags
+  isSubmitted?: boolean;
+  isSaved?: boolean;
 }
 
 const QuoteCard = ({
@@ -31,48 +44,84 @@ const QuoteCard = ({
   quotesCount,
   quoteId,
   quoteMaterials,
+  isSubmitted,
+  isSaved,
+  price,
 }: QuoteCardProps) => {
   const navigate = useNavigate();
+
   return (
     <div className="border border-[#F0F2F5] rounded-xl p-4 bg-white flex flex-col justify-between shadow-sm">
+      {/* Header */}
       <div className="flex justify-between items-center bg-blue-100 px-4 py-2 rounded-xl">
         <div>
           <h3 className="font-semibold text-[20px]">
-            {user?.firstName} {user?.lastName.slice(0,1)} | {title}
+            {user ? `${user.firstName} ${user.lastName?.slice(0, 1)} | ` : ""}
+            {title}
           </h3>
-          <p className="text-[14px] text-gray-500">
-            {location ?? ""}
-          </p>
+
+          {location && (
+            <p className="text-[14px] text-gray-500">{location}</p>
+          )}
         </div>
-        <HeartIcon />
+
+        {isSaved ? (
+          <span className="text-blue-600 text-sm font-semibold">Saved</span>
+        ) : isSubmitted ? (
+          <span className="text-green-600 text-sm font-semibold">
+            Bid Submitted
+          </span>
+        ) : (
+          <HeartIcon />
+        )}
       </div>
 
-      <div className="  py-3 flex-1">
-        <h4 className="font-semibold text-[18px]">
-          {quantity ?? ""}
-        </h4>
+      {/* Body */}
+      <div className="py-3 flex-1">
+        {quantity && <h4 className="font-semibold text-[18px]">{quantity}</h4>}
+
         <p className="text-lg text-[#0A090B]">{title}</p>
-        
+
         <hr className="my-3" />
 
-        <p className="text-sm text-[#0A090B]">{quoteMaterials.join(" | ")}</p>
+        {/* Materials safe join */}
+        {quoteMaterials && quoteMaterials.length > 0 && (
+          <p className="text-sm text-[#0A090B]">
+            {quoteMaterials?.join(" | ")}
+          </p>
+        )}
 
         <div className="flex items-center justify-between mt-4 text-sm text-gray-700">
           <div className="flex items-center gap-1">
             <CircleDollarSign />
-            <span>{budget < 1 ? "Open" : `$${budget}`}</span>
+            <span>
+              {price !== undefined
+                ? `$${price}`
+                : budget !== undefined
+                  ? budget < 1
+                    ? "Open"
+                    : `$${budget}`
+                  : "Open"}
+            </span>
           </div>
-          {<div className="flex items-center gap-1">
-            <StarIcon />
-            <span>{rating ?? "1"}</span>
-          </div>}
-          <div className="flex items-center gap-1">
-            <Briefcase />
-            <span>{quotesCount ?? "0"}</span>
-          </div>
+
+          {rating && (
+            <div className="flex items-center gap-1">
+              <StarIcon />
+              <span>{rating}</span>
+            </div>
+          )}
+
+          {quotesCount !== undefined && (
+            <div className="flex items-center gap-1">
+              <Briefcase />
+              <span>{quotesCount}</span>
+            </div>
+          )}
         </div>
       </div>
 
+      {/* Footer actions */}
       <div className="flex items-center justify-between gap-5 mt-2 py-3">
         <Button
           text={"View Details"}
@@ -80,11 +129,11 @@ const QuoteCard = ({
           position="w-full"
           width="w-full"
           color="text-[#CC400C]"
-          styles="border border-[#CC400C] "
+          styles="border border-[#CC400C]"
           handleClick={() => navigate(`/ems/manage-quote/${quoteId}`)}
         />
 
-        <ChatCircleIcon />
+        {!isSubmitted && !isSaved && <ChatCircleIcon />}
       </div>
     </div>
   );

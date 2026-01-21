@@ -1,0 +1,13 @@
+query MyFavoriteQuotes {
+  myFavoriteQuotes {
+    quoteId
+    title
+    status
+    budget
+    createdAt
+    user {
+      id
+      email
+    }
+  }
+}

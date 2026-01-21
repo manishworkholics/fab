@@ -4,7 +4,7 @@ query DetailedBidsForQuote($quoteId: String!) {
     amount
     bidderId
     createdAt
-    bidder{
+    bidder {
       id
       firstName
       lastName
@@ -17,7 +17,9 @@ query DetailedBidsForQuote($quoteId: String!) {
     }
     pricingBreakdown {
       description
-      price
+      unitPrice
+      quantity
+      totalPrice
     }
   }
 }

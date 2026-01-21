@@ -1,0 +1,13 @@
+query MyBids {
+  myBids {
+    id
+    amount
+    status
+    createdAt
+    quote {
+      quoteId
+      title
+      status
+    }
+  }
+}

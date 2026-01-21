@@ -7,8 +7,31 @@ import QuoteSteps from "./components/QuoteSteps";
 import QuoteForm from "./components/QuoteForm";
 import OnboardingForm from "./components/OnboardingForm";
 import { deleteFromLocalStorage } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import Button from "@/components/ui/Buttons";
+
 
 export default function CreateQuotePage() {
+
+  const navigate = useNavigate();
+
+  const clearQuoteData = () => {
+    deleteFromLocalStorage("quoteData");
+    deleteFromLocalStorage("quoteEMSDetail");
+  };
+
+  const handleGoToDashboard = () => {
+    clearQuoteData();
+
+    navigate("/dashboard");
+
+    // Force one reload after navigation
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  };
+
+
   const [queryParams] = useSearchParams();
 
   const isNewUser = queryParams.get("add") === "new-user";
@@ -42,17 +65,31 @@ export default function CreateQuotePage() {
         <div>
           <div className="flex items-center gap-4 mx-auto bg-black mt-9 rounded-lg w-fit px-5 p-3 justify-center">
             <p className="text-[#F0F2F5] font-semibold">
-              {isNewUser 
-                ? "Let's complete your signup process" 
-                : isQuickQuote 
+              {isNewUser
+                ? "Let's complete your signup process"
+                : isQuickQuote
                   ? "Complete your Quick Quote - Review and Submit"
                   : "Let's create your Quote"}
             </p>
             <LongArrowDown />
           </div>
-          <div className="absolute top-9 right-[5rem]" onClick={() => {}}>
+          {/* <div className="absolute top-9 right-[5rem]" onClick={() => { }}>
+            <img src="/images/user-lang.png" />
+          </div> */}
+
+          <div className="absolute top-9 right-[5rem] flex items-center gap-4">
+            <Button
+              text="Skip for now"
+              handleClick={handleGoToDashboard}
+              background="bg-transparent"
+              color="text-[#EB5017]"
+              styles="border border-[#EB5017] hover:bg-[#EB5017] hover:text-white transition-colors"
+            />
+
             <img src="/images/user-lang.png" />
           </div>
+
+
           <div className="flex mt-4">
             <QuoteSteps
               activeStepBgColor={"bg-[#EB5017]"}

@@ -15,7 +15,6 @@ export interface RegisterStateProps {
   password: string;
   phone: string;
   role: UserRole;
-  companyName?: string;
   acceptTerms: boolean;
 }
 
@@ -28,7 +27,6 @@ export const initialState: RegisterStateProps = {
   password: "",
   phone: "",
   role: UserRole.Pm,
-  companyName: "",
   acceptTerms: false,
 };
 
@@ -51,7 +49,6 @@ function useRegister() {
     password,
     phone,
     role,
-    companyName,
     acceptTerms,
   }: RegisterStateProps) {
     try {
@@ -65,7 +62,6 @@ function useRegister() {
             password,
             phone,
             role,
-            companyName: role === "EMS" ? companyName : "",
             acceptTerms,
           },
         },
@@ -88,7 +84,7 @@ function useRegister() {
         const userRole = data.register.user.role;
 
         if (userRole === "PM") {
-          navigate("/quote?add=new-user");
+          navigate("/pm/new-quote");
         } else if (userRole === "EMS") {
           navigate("/ems/complete-profile");
         }

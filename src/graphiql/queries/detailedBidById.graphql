@@ -4,7 +4,7 @@ query DetailedBidByID($bidId: String!) {
     amount
     bidderId
     createdAt
-    bidder{
+    bidder {
       id
       firstName
       lastName
@@ -18,7 +18,9 @@ query DetailedBidByID($bidId: String!) {
     }
     pricingBreakdown {
       description
-      price
+      unitPrice
+      quantity
+      totalPrice
     }
   }
 }

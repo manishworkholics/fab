@@ -38,8 +38,10 @@ export type Bid = {
   bidderId: Scalars['Int']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
+  message?: Maybe<Scalars['String']['output']>;
   quote: Quote;
   quoteId: Scalars['String']['output'];
+  status: Scalars['String']['output'];
   user: User;
   userId: Scalars['Int']['output'];
 };
@@ -193,6 +195,7 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addToFavorites: Scalars['Boolean']['output'];
   archiveQuote: BasicResponse;
   completeEMSProfile: Scalars['Boolean']['output'];
   createQuote: Quote;
@@ -202,12 +205,19 @@ export type Mutation = {
   placeBid: Bid;
   placeDetailedBid: Bid;
   register: AuthResponse;
+  removeFromFavorites: Scalars['Boolean']['output'];
   requestEmailVerification: BasicResponse;
   signNDA: BasicResponse;
   updateMe: UserResponse;
   updateProjectStatus: Scalars['Boolean']['output'];
   updateQuote: Quote;
   verifyEmail: BasicResponse;
+  withdrawQuoteBid: Scalars['Boolean']['output'];
+};
+
+
+export type MutationAddToFavoritesArgs = {
+  quoteId: Scalars['String']['input'];
 };
 
 
@@ -253,6 +263,11 @@ export type MutationRegisterArgs = {
 };
 
 
+export type MutationRemoveFromFavoritesArgs = {
+  quoteId: Scalars['String']['input'];
+};
+
+
 export type MutationSignNdaArgs = {
   quoteId: Scalars['String']['input'];
 };
@@ -280,6 +295,11 @@ export type MutationVerifyEmailArgs = {
   token: Scalars['String']['input'];
 };
 
+
+export type MutationWithdrawQuoteBidArgs = {
+  bidId: Scalars['String']['input'];
+};
+
 export type Otp = {
   __typename?: 'Otp';
   createdAt: Scalars['DateTime']['output'];
@@ -296,12 +316,16 @@ export type PlaceBidInput = {
 export type PricingLineItem = {
   __typename?: 'PricingLineItem';
   description: Scalars['String']['output'];
-  price: Scalars['Float']['output'];
+  quantity: Scalars['Float']['output'];
+  totalPrice: Scalars['Float']['output'];
+  unitPrice: Scalars['Float']['output'];
 };
 
 export type PricingLineItemInput = {
   description: Scalars['String']['input'];
-  price: Scalars['Float']['input'];
+  quantity: Scalars['Float']['input'];
+  totalPrice: Scalars['Float']['input'];
+  unitPrice: Scalars['Float']['input'];
 };
 
 export type Profile = {
@@ -369,6 +393,7 @@ export type Query = {
   emsManufacturersByLocationAndType: Array<EmsManufacturer>;
   /** Get all EMS manufacturers only (excludes pure suppliers) */
   emsManufacturersOnly: Array<EmsManufacturer>;
+  emsOpenQuotes: Array<Quote>;
   /** Find EMS suppliers by location */
   emsSuppliersByLocation: Array<EmsManufacturer>;
   /** Get all EMS suppliers only (excludes pure manufacturers) */
@@ -376,9 +401,12 @@ export type Query = {
   findAllCompanies: Array<Company>;
   getAllEMS: Array<EmsProfileDto>;
   getEMSById?: Maybe<EmsProfileDto>;
+  isFavorite: Scalars['Boolean']['output'];
   me: User;
+  myBids: Array<Bid>;
   myDraftQuote: Quote;
   myDraftQuotes: Array<Quote>;
+  myFavoriteQuotes: Array<Quote>;
   myProjectsAsEMS: Array<Project>;
   myProjectsAsPM: Array<Project>;
   myQuotes: Quotes;
@@ -434,6 +462,11 @@ export type QueryFindAllCompaniesArgs = {
 
 export type QueryGetEmsByIdArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type QueryIsFavoriteArgs = {
+  quoteId: Scalars['String']['input'];
 };
 
 
@@ -509,7 +542,8 @@ export type QuoteFilterInput = {
 export enum QuoteStatus {
   Assigned = 'ASSIGNED',
   Completed = 'COMPLETED',
-  Pending = 'PENDING'
+  Pending = 'PENDING',
+  Withdrawn = 'WITHDRAWN'
 }
 
 /** quote types */
@@ -644,6 +678,14 @@ export type PlaceBidForQuoteMutationVariables = Exact<{
 
 export type PlaceBidForQuoteMutation = { __typename?: 'Mutation', placeDetailedBid: { __typename?: 'Bid', id: string } };
 
+export type PlaceDetailedBidMutationVariables = Exact<{
+  quoteId: Scalars['String']['input'];
+  input: DetailedBidInput;
+}>;
+
+
+export type PlaceDetailedBidMutation = { __typename?: 'Mutation', placeDetailedBid: { __typename?: 'Bid', id: string, amount: number, createdAt: any } };
+
 export type RegisterUserMutationVariables = Exact<{
   input: RegisterInput;
 }>;
@@ -664,14 +706,19 @@ export type DetailedBidByIdQueryVariables = Exact<{
 }>;
 
 
-export type DetailedBidByIdQuery = { __typename?: 'Query', detailedBid: { __typename?: 'DetailedBidResponse', id: string, amount: number, bidderId: number, createdAt: any, additionalNotes?: string | null, bidder: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, email: string }, projectApproach?: { __typename?: 'ProjectApproach', relevantExperience?: string | null, technicalApproach?: string | null, estimatedTimeline?: string | null } | null, pricingBreakdown?: Array<{ __typename?: 'PricingLineItem', description: string, price: number }> | null } };
+export type DetailedBidByIdQuery = { __typename?: 'Query', detailedBid: { __typename?: 'DetailedBidResponse', id: string, amount: number, bidderId: number, createdAt: any, additionalNotes?: string | null, bidder: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, email: string }, projectApproach?: { __typename?: 'ProjectApproach', relevantExperience?: string | null, technicalApproach?: string | null, estimatedTimeline?: string | null } | null, pricingBreakdown?: Array<{ __typename?: 'PricingLineItem', description: string, unitPrice: number, quantity: number, totalPrice: number }> | null } };
 
 export type DetailedBidsForQuoteQueryVariables = Exact<{
   quoteId: Scalars['String']['input'];
 }>;
 
 
-export type DetailedBidsForQuoteQuery = { __typename?: 'Query', detailedBidsForQuote: Array<{ __typename?: 'DetailedBidResponse', id: string, amount: number, bidderId: number, createdAt: any, additionalNotes?: string | null, bidder: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null }, projectApproach?: { __typename?: 'ProjectApproach', relevantExperience?: string | null, technicalApproach?: string | null, estimatedTimeline?: string | null } | null, pricingBreakdown?: Array<{ __typename?: 'PricingLineItem', description: string, price: number }> | null }> };
+export type DetailedBidsForQuoteQuery = { __typename?: 'Query', detailedBidsForQuote: Array<{ __typename?: 'DetailedBidResponse', id: string, amount: number, bidderId: number, createdAt: any, additionalNotes?: string | null, bidder: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null }, projectApproach?: { __typename?: 'ProjectApproach', relevantExperience?: string | null, technicalApproach?: string | null, estimatedTimeline?: string | null } | null, pricingBreakdown?: Array<{ __typename?: 'PricingLineItem', description: string, unitPrice: number, quantity: number, totalPrice: number }> | null }> };
+
+export type MyBidsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyBidsQuery = { __typename?: 'Query', myBids: Array<{ __typename?: 'Bid', id: string, amount: number, status: string, createdAt: any, quote: { __typename?: 'Quote', quoteId?: string | null, title?: string | null, status: QuoteStatus } }> };
 
 export type GetMyQuotesQueryVariables = Exact<{
   params?: InputMaybe<FindAllQuotesInput>;
@@ -694,6 +741,11 @@ export type GetQuotesQueryVariables = Exact<{
 
 export type GetQuotesQuery = { __typename?: 'Query', quotes: { __typename?: 'Quotes', totalCount: number, quotes: Array<{ __typename?: 'Quote', quoteId?: string | null, description?: string | null, title?: string | null, quoteMaterials: Array<string>, turnTime?: number | null, quoteFiles: Array<string>, quoteType: QuoteType, status: QuoteStatus, budget: number, assignedEMSId?: number | null, isArchived: boolean, userSignedNDA?: boolean | null, quoteName: string, hasNDA: boolean, updatedAt: any, createdAt: any, bids?: Array<{ __typename?: 'Bid', bidderId: number, amount: number }> | null, user: { __typename?: 'User', id: string, username?: string | null, email: string, firstName?: string | null, lastName?: string | null, phone?: string | null, role?: UserRole | null, profile?: { __typename?: 'Profile', id: number, bio?: string | null, location?: string | null, jobRole?: ProfileJobRole | null, projectBuildType?: ProjectBuildType | null } | null } }> } };
 
+export type MyFavoriteQuotesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyFavoriteQuotesQuery = { __typename?: 'Query', myFavoriteQuotes: Array<{ __typename?: 'Quote', quoteId?: string | null, title?: string | null, status: QuoteStatus, budget: number, createdAt: any, user: { __typename?: 'User', id: string, email: string } }> };
+
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -704,11 +756,14 @@ export const CreateQuoteDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const DeleteQuoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteQuote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteQuote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"quoteId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<DeleteQuoteMutation, DeleteQuoteMutationVariables>;
 export const LoginUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LoginUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<LoginUserMutation, LoginUserMutationVariables>;
 export const PlaceBidForQuoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"PlaceBidForQuote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"detailedBidInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DetailedBidInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"placeDetailedBid"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"quoteId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}}},{"kind":"Argument","name":{"kind":"Name","value":"detailedBidInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"detailedBidInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<PlaceBidForQuoteMutation, PlaceBidForQuoteMutationVariables>;
+export const PlaceDetailedBidDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"PlaceDetailedBid"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DetailedBidInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"placeDetailedBid"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"quoteId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}}},{"kind":"Argument","name":{"kind":"Name","value":"detailedBidInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<PlaceDetailedBidMutation, PlaceDetailedBidMutationVariables>;
 export const RegisterUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RegisterUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RegisterInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"register"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<RegisterUserMutation, RegisterUserMutationVariables>;
 export const UpdateQuoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateQuote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"updateQuoteInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateQuoteInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateQuote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updateQuoteInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"updateQuoteInput"}}},{"kind":"Argument","name":{"kind":"Name","value":"quoteId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quoteId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"quoteType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"quoteMaterials"}},{"kind":"Field","name":{"kind":"Name","value":"turnTime"}},{"kind":"Field","name":{"kind":"Name","value":"quoteFiles"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"hasNDA"}},{"kind":"Field","name":{"kind":"Name","value":"quoteName"}}]}}]}}]} as unknown as DocumentNode<UpdateQuoteMutation, UpdateQuoteMutationVariables>;
-export const DetailedBidByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DetailedBidByID"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bidId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"detailedBid"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"bidId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bidId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"bidderId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"bidder"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"additionalNotes"}},{"kind":"Field","name":{"kind":"Name","value":"projectApproach"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"relevantExperience"}},{"kind":"Field","name":{"kind":"Name","value":"technicalApproach"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedTimeline"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricingBreakdown"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"price"}}]}}]}}]}}]} as unknown as DocumentNode<DetailedBidByIdQuery, DetailedBidByIdQueryVariables>;
-export const DetailedBidsForQuoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DetailedBidsForQuote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"detailedBidsForQuote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"quoteId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"bidderId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"bidder"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"additionalNotes"}},{"kind":"Field","name":{"kind":"Name","value":"projectApproach"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"relevantExperience"}},{"kind":"Field","name":{"kind":"Name","value":"technicalApproach"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedTimeline"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricingBreakdown"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"price"}}]}}]}}]}}]} as unknown as DocumentNode<DetailedBidsForQuoteQuery, DetailedBidsForQuoteQueryVariables>;
+export const DetailedBidByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DetailedBidByID"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bidId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"detailedBid"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"bidId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bidId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"bidderId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"bidder"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"additionalNotes"}},{"kind":"Field","name":{"kind":"Name","value":"projectApproach"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"relevantExperience"}},{"kind":"Field","name":{"kind":"Name","value":"technicalApproach"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedTimeline"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricingBreakdown"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"unitPrice"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}}]}}]}}]}}]} as unknown as DocumentNode<DetailedBidByIdQuery, DetailedBidByIdQueryVariables>;
+export const DetailedBidsForQuoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DetailedBidsForQuote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"detailedBidsForQuote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"quoteId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"bidderId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"bidder"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"additionalNotes"}},{"kind":"Field","name":{"kind":"Name","value":"projectApproach"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"relevantExperience"}},{"kind":"Field","name":{"kind":"Name","value":"technicalApproach"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedTimeline"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricingBreakdown"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"unitPrice"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}}]}}]}}]}}]} as unknown as DocumentNode<DetailedBidsForQuoteQuery, DetailedBidsForQuoteQueryVariables>;
+export const MyBidsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyBids"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myBids"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"quote"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quoteId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]}}]} as unknown as DocumentNode<MyBidsQuery, MyBidsQueryVariables>;
 export const GetMyQuotesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMyQuotes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"params"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"FindAllQuotesInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myQuotes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"params"},"value":{"kind":"Variable","name":{"kind":"Name","value":"params"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quoteId"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"quoteMaterials"}},{"kind":"Field","name":{"kind":"Name","value":"turnTime"}},{"kind":"Field","name":{"kind":"Name","value":"quoteFiles"}},{"kind":"Field","name":{"kind":"Name","value":"quoteType"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"budget"}},{"kind":"Field","name":{"kind":"Name","value":"assignedEMSId"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"userSignedNDA"}},{"kind":"Field","name":{"kind":"Name","value":"quoteName"}},{"kind":"Field","name":{"kind":"Name","value":"hasNDA"}},{"kind":"Field","name":{"kind":"Name","value":"bids"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"bidderId"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"location"}},{"kind":"Field","name":{"kind":"Name","value":"jobRole"}},{"kind":"Field","name":{"kind":"Name","value":"projectBuildType"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<GetMyQuotesQuery, GetMyQuotesQueryVariables>;
 export const GetQuoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetQuote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"quoteId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"quoteId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quoteId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"quoteType"}},{"kind":"Field","name":{"kind":"Name","value":"quoteMaterials"}},{"kind":"Field","name":{"kind":"Name","value":"quoteFiles"}},{"kind":"Field","name":{"kind":"Name","value":"budget"}},{"kind":"Field","name":{"kind":"Name","value":"turnTime"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"quoteName"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"userSignedNDA"}},{"kind":"Field","name":{"kind":"Name","value":"hasNDA"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"assignedEMS"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bids"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bidderId"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]}}]} as unknown as DocumentNode<GetQuoteQuery, GetQuoteQueryVariables>;
 export const GetQuotesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetQuotes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"params"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"FindAllQuotesInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quotes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"params"},"value":{"kind":"Variable","name":{"kind":"Name","value":"params"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quoteId"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"quoteMaterials"}},{"kind":"Field","name":{"kind":"Name","value":"turnTime"}},{"kind":"Field","name":{"kind":"Name","value":"quoteFiles"}},{"kind":"Field","name":{"kind":"Name","value":"quoteType"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"budget"}},{"kind":"Field","name":{"kind":"Name","value":"assignedEMSId"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"userSignedNDA"}},{"kind":"Field","name":{"kind":"Name","value":"quoteName"}},{"kind":"Field","name":{"kind":"Name","value":"hasNDA"}},{"kind":"Field","name":{"kind":"Name","value":"bids"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bidderId"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"location"}},{"kind":"Field","name":{"kind":"Name","value":"jobRole"}},{"kind":"Field","name":{"kind":"Name","value":"projectBuildType"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<GetQuotesQuery, GetQuotesQueryVariables>;
+export const MyFavoriteQuotesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyFavoriteQuotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myFavoriteQuotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quoteId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"budget"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]} as unknown as DocumentNode<MyFavoriteQuotesQuery, MyFavoriteQuotesQueryVariables>;
 export const GetAllUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"verifiedAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetAllUsersQuery, GetAllUsersQueryVariables>;

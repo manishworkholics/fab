@@ -43,7 +43,7 @@ const EMSSingleQuotePage = () => {
                 <p className="text-gray-700 leading-relaxed">{quote.description}</p>
 
                 {/* TODO: Add technical requirements & deliverables */}
-                {/* <div className="mt-6 grid grid-cols-2 gap-4">
+                <div className="mt-6 grid grid-cols-2 gap-4">
                   <div>
                     <h4 className="font-medium text-gray-900">Technical Requirements</h4>
                     <ul className="mt-2 text-sm text-gray-600 space-y-1">
@@ -62,12 +62,12 @@ const EMSSingleQuotePage = () => {
                       <li>• Final assembled units</li>
                     </ul>
                   </div>
-                </div> */}
+                </div>
               </CardContent>
             </Card>
 
             {/* TODO: Add project timeline & milestones */}
-            {/* <Card>
+            <Card>
               <CardHeader>
                 <CardTitle>Project Timeline & Milestones</CardTitle>
               </CardHeader>
@@ -87,7 +87,7 @@ const EMSSingleQuotePage = () => {
                   </div>
                 </div>
               </CardContent>
-            </Card> */}
+            </Card>
           </div>
 
           {/* Sidebar */}

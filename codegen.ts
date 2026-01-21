@@ -1,6 +1,8 @@
 import { CodegenConfig } from "@graphql-codegen/cli";
 
-const schema = "http://172.208.69.80:9001/graphql";
+// const schema = "http://172.208.69.80:9001/graphql";
+const schema = "http://localhost:9001/graphql";
+
 
 const config: CodegenConfig = {
   schema,

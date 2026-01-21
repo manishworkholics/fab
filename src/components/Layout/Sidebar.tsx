@@ -12,13 +12,13 @@ import { getItemFromStorage } from "../../helpers/misc";
 import { sideNavData } from "./SideNavData";
 
 interface SearchBarProps {
- 
+
   role: string;
   toggleSideBar?: () => void;
   isSideBar: boolean;
 }
 
-const Sidebar = ({  role, toggleSideBar, isSideBar }: SearchBarProps) => {
+const Sidebar = ({ role, toggleSideBar, isSideBar }: SearchBarProps) => {
   const [user, setUser] = useState<{
     id: string;
     firstName: string;
@@ -52,9 +52,8 @@ const Sidebar = ({  role, toggleSideBar, isSideBar }: SearchBarProps) => {
         .map((data) => (
           <button
             key={data.label}
-            className={`flex items-center px-4 py-4 text-sm font-medium rounded-md w-full ${
-              location.pathname === data.label ? "text-[#EB5017] bg-orange-100" : "text-[#344054]"
-            }`}
+            className={`flex items-center px-4 py-4 text-sm font-medium rounded-md w-full ${location.pathname === data.label ? "text-[#EB5017] bg-orange-100" : "text-[#344054]"
+              }`}
             onClick={() => {
               navigate(data.label);
               setIsMobileMenuOpen(false);
@@ -106,9 +105,9 @@ const Sidebar = ({  role, toggleSideBar, isSideBar }: SearchBarProps) => {
       )}
 
       {/* Sidebar for large screens */}
-      {isSideBar && (
+      {/* {isSideBar && (
         <aside
-         className="hidden lg:flex w-64 shrink-0 bg-white shadow-md flex-col z-20 h-screen"
+          className="hidden lg:flex w-64 shrink-0 bg-white shadow-md flex-col z-20 h-screen"
 
         >
           <div className="p-4 flex items-center justify-between mb-3">
@@ -145,7 +144,49 @@ const Sidebar = ({  role, toggleSideBar, isSideBar }: SearchBarProps) => {
             </div>
           </div>
         </aside>
+      )} */}
+
+
+      {isSideBar && (
+        <aside
+          className="hidden lg:flex fixed left-0 top-0 w-64 bg-white shadow-md flex-col z-30 h-screen overflow-y-auto"
+        >
+          <div className="p-4 flex items-center justify-between mb-3">
+            <Link to="/">
+              <img src="/images/logo.png" className="w-[140px] h-[23.06px]" alt="Logo" />
+            </Link>
+            <div onClick={toggleSideBar} className="cursor-pointer">
+              <CollapseIcon />
+            </div>
+          </div>
+
+          <div className="px-4 mb-8">
+            <SearchBar placeHolderText="search" background="bg-transparent" textIcon />
+          </div>
+
+          <div className="flex-1 border-b pb-9">
+            {renderNavItems()}
+          </div>
+
+          <div className="p-4 mt-auto">
+            <div className="flex items-center">
+              <img src="/images/user-2.png" alt="Profile" className="w-10 h-10 rounded-full" />
+              <div className="ml-3">
+                <p className="text-sm font-medium text-gray-800 truncate">
+                  {user?.firstName || ""}
+                </p>
+                <p className="text-xs text-gray-500 truncate overflow-auto max-w-32 min-w-32">
+                  {user?.email || ""}
+                </p>
+              </div>
+              <div className="ml-3 cursor-pointer" onClick={handleLogout}>
+                <LogoutIcon />
+              </div>
+            </div>
+          </div>
+        </aside>
       )}
+
     </>
   );
 };
