@@ -144,13 +144,13 @@ export default function QuoteBidView() {
                       />
                     </div>
                     <div className="col-span-3">
-                      <Input
+                      {/* <Input
                         type="number"
                         value={item.price}
                         placeholder="0.00"
                         readOnly
                         className="bg-muted/30"
-                      />
+                      /> */}
                     </div>
                     <div className="col-span-3">
                       <Input
