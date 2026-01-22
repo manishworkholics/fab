@@ -170,7 +170,12 @@
 
 
 
-import { useState } from "react";
+
+
+import { useEffect, useState } from "react";
+import { useFavoriteQuote } from "@/grahpql/hooks/useFavoriteQuote";
+import { useMyFavoriteQuotes } from "@/grahpql/hooks/useMyFavoriteQuotes";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import Button from "@/components/ui/Buttons";
 import { Badge } from "@/components/ui/Badge";
@@ -189,6 +194,36 @@ const EmsBidPage = () => {
   const { id } = useParams<{ id: string }>();
 
   const { quote, isLoading } = useSingleQuote(id || "");
+  const { addToFavorite, removeFromFavorite } = useFavoriteQuote();
+  const { favorites, refetch } = useMyFavoriteQuotes();
+
+  const [isFav, setIsFav] = useState(false);
+
+  useEffect(() => {
+    if (!quote) return;
+
+    const exists = favorites.some((f) => f.quoteId === quote.quoteId);
+    setIsFav(exists);
+  }, [favorites, quote]);
+
+  const toggleFavorite = async () => {
+    if (!quote?.quoteId) return;   // ✅ guard
+
+    try {
+      if (isFav) {
+        await removeFromFavorite(quote.quoteId);
+        setIsFav(false);
+      } else {
+        await addToFavorite(quote.quoteId);
+        setIsFav(true);
+      }
+
+      refetch();
+    } catch (err) {
+      console.error("Favorite toggle failed", err);
+    }
+  };
+
   const { bids } = useMyBids();
 
   if (isLoading) {
@@ -352,7 +387,8 @@ const EmsBidPage = () => {
                 <Button
                   variant="outline"
                   className="w-full"
-                  text="Save to Favorites"
+                  text={isFav ? "Remove from Favorites" : "Save to Favorites"}
+                  handleClick={toggleFavorite}
                 />
               </CardContent>
             </Card>

@@ -98,7 +98,7 @@ type TabType = "BROWSE" | "SAVED" | "SUBMITTED";
 const QuoteManagement = () => {
   const { quotes, isLoading, totalCount, applyFilters } = usePmQuotes();
   const { bids, loading: bidsLoading } = useMyBids();
-  const { favorites, loading: favoritesLoading } = useMyFavoriteQuotes();
+  const { favorites, refetch, loading: favoritesLoading } = useMyFavoriteQuotes();
 
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -110,6 +110,8 @@ const QuoteManagement = () => {
     setCurrentPage(page);
     applyFilters({ page });
   };
+
+  const favoriteIds = new Set(favorites.map(f => f.quoteId));
 
   return (
     <DasboardLayout>
@@ -175,7 +177,7 @@ const QuoteManagement = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {quotes.map((item: any) => (
-                  <QuoteCard key={item.quoteId} {...item} />
+                  <QuoteCard key={item.quoteId} {...item} isSaved={favoriteIds.has(item.quoteId)} onFavoriteChanged={refetch}/>
                 ))}
               </div>
             )}
@@ -205,7 +207,8 @@ const QuoteManagement = () => {
                     status={fav.status}
                     budget={fav.budget}
                     createdAt={fav.createdAt}
-                    isSaved
+                    isSaved={true}
+                    
                   />
                 ))}
               </div>
@@ -237,6 +240,7 @@ const QuoteManagement = () => {
                     price={bid.amount}
                     submittedAt={bid.createdAt}
                     isSubmitted
+                    isSaved={favoriteIds.has(bid.quote.quoteId)}
                   />
                 ))}
               </div>

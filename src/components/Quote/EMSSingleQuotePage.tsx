@@ -1,3 +1,7 @@
+import { useEffect, useState } from "react";
+import { useFavoriteQuote } from "@/grahpql/hooks/useFavoriteQuote";
+import { useMyFavoriteQuotes } from "@/grahpql/hooks/useMyFavoriteQuotes";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import Button from "@/components/ui/Buttons";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,6 +15,37 @@ const EMSSingleQuotePage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { quote, isLoading } = useSingleQuote(id || "");
+  const { addToFavorite, removeFromFavorite } = useFavoriteQuote();
+  const { favorites, refetch } = useMyFavoriteQuotes();
+
+  const [isFav, setIsFav] = useState(false);
+
+  useEffect(() => {
+    if (!quote) return;
+
+    const exists = favorites.some((f) => f.quoteId === quote.quoteId);
+    setIsFav(exists);
+  }, [favorites, quote]);
+
+  const toggleFavorite = async () => {
+    if (!quote?.quoteId) return;   // ✅ guard
+
+    try {
+      if (isFav) {
+        await removeFromFavorite(quote.quoteId);
+        setIsFav(false);
+      } else {
+        await addToFavorite(quote.quoteId);
+        setIsFav(true);
+      }
+
+      refetch();
+    } catch (err) {
+      console.error("Favorite toggle failed", err);
+    }
+  };
+
+
 
   if (isLoading) return <LoaderIcon />;
 
@@ -144,7 +179,13 @@ const EMSSingleQuotePage = () => {
                   onClick={() => navigate(`/ems/manage-quote/${id}/bid`)}
                   text="Submit Bid"
                 />
-                <Button variant="outline" className="w-full" text="Save to Favorites" />
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  text={isFav ? "Remove from Favorites" : "Save to Favorites"}
+                  handleClick={toggleFavorite}
+                />
+
               </CardContent>
             </Card>
           </div>

@@ -1,8 +1,11 @@
+import { useState, useEffect } from "react";
 import { Briefcase, CircleDollarSign, StarIcon } from "lucide-react";
 import Button from "../ui/Buttons";
 import ChatCircleIcon from "../icons/ChatCircleIcon";
 import HeartIcon from "../icons/HeartIcon";
 import { useNavigate } from "react-router-dom";
+import { useFavoriteQuote } from "@/grahpql/hooks/useFavoriteQuote";
+
 
 interface userProp {
   firstName: string;
@@ -32,6 +35,7 @@ interface QuoteCardProps {
   // UI flags
   isSubmitted?: boolean;
   isSaved?: boolean;
+  onFavoriteChanged?: () => void;
 }
 
 const QuoteCard = ({
@@ -47,11 +51,36 @@ const QuoteCard = ({
   isSubmitted,
   isSaved,
   price,
+  onFavoriteChanged,
 }: QuoteCardProps) => {
+
+  const { addToFavorite, removeFromFavorite } = useFavoriteQuote();
+  const [isFav, setIsFav] = useState(!!isSaved);
+
+  useEffect(() => {
+    setIsFav(!!isSaved);
+  }, [isSaved]);
+
   const navigate = useNavigate();
+
+  const toggleFavorite = async () => {
+    try {
+      if (isFav) {
+        await removeFromFavorite(quoteId);
+        setIsFav(false);
+      } else {
+        await addToFavorite(quoteId);
+        setIsFav(true);
+      }
+      onFavoriteChanged?.();
+    } catch (err) {
+      console.error("Favorite toggle failed", err);
+    }
+  };
 
   return (
     <div className="border border-[#F0F2F5] rounded-xl p-4 bg-white flex flex-col justify-between shadow-sm">
+
       {/* Header */}
       <div className="flex justify-between items-center bg-blue-100 px-4 py-2 rounded-xl">
         <div>
@@ -65,15 +94,22 @@ const QuoteCard = ({
           )}
         </div>
 
-        {isSaved ? (
-          <span className="text-blue-600 text-sm font-semibold">Saved</span>
-        ) : isSubmitted ? (
+        {isSubmitted ? (
           <span className="text-green-600 text-sm font-semibold">
             Bid Submitted
           </span>
         ) : (
-          <HeartIcon />
+          <div
+            onClick={toggleFavorite}
+            className="cursor-pointer flex items-center gap-2"
+          >
+            <HeartIcon color={isFav ? "red" : "#999"} />
+            {isFav && (
+              <span className="text-blue-600 text-sm font-semibold">Saved</span>
+            )}
+          </div>
         )}
+
       </div>
 
       {/* Body */}
@@ -84,10 +120,9 @@ const QuoteCard = ({
 
         <hr className="my-3" />
 
-        {/* Materials safe join */}
         {quoteMaterials && quoteMaterials.length > 0 && (
           <p className="text-sm text-[#0A090B]">
-            {quoteMaterials?.join(" | ")}
+            {quoteMaterials.join(" | ")}
           </p>
         )}
 
@@ -121,7 +156,7 @@ const QuoteCard = ({
         </div>
       </div>
 
-      {/* Footer actions */}
+      {/* Footer */}
       <div className="flex items-center justify-between gap-5 mt-2 py-3">
         <Button
           text={"View Details"}
@@ -138,5 +173,6 @@ const QuoteCard = ({
     </div>
   );
 };
+
 
 export default QuoteCard;

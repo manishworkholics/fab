@@ -1,36 +1,39 @@
 import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import BidComparisonTable from "@/components/Quote/BidComparisonTable";
 import AcceptBidModal from "@/components/Quote/AcceptBidModal";
 import DasboardLayout from "../../../layout";
-
-
-const dummyBids = [
-    {
-        id: "1",
-        company: "ABC Electronics",
-        price: 45000,
-        days: 10,
-        rating: 4.5,
-    },
-    {
-        id: "2",
-        company: "Zen Circuits",
-        price: 42000,
-        days: 14,
-        rating: 4.2,
-    },
-    {
-        id: "3",
-        company: "Omega EMS",
-        price: 47000,
-        days: 8,
-        rating: 4.8,
-    },
-];
+import LoaderIcon from "@/components/icons/LoaderIcon";
+import { useQuoteBids } from "@/grahpql/hooks/useQuoteBids";
+import { useAcceptQuoteBid } from "@/grahpql/hooks/useAcceptQuoteBid";
 
 export default function BidComparisonPage() {
+    const { quoteId } = useParams<{ quoteId: string }>();
+    const navigate = useNavigate();
+
+    const { bids, loading, refetch } = useQuoteBids(quoteId || "");
+    const { acceptBid } = useAcceptQuoteBid();
+
     const [selectedBid, setSelectedBid] = useState<any>(null);
     const [open, setOpen] = useState(false);
+
+    const handleAcceptConfirm = async () => {
+        if (!selectedBid) return;
+
+        try {
+            await acceptBid(selectedBid.id);
+
+            setOpen(false);
+            await refetch();
+
+            // optional redirect
+            navigate("/pm/projects");
+
+        } catch (err) {
+            console.error("Accept bid failed", err);
+            alert("Failed to accept bid");
+        }
+    };
 
     return (
         <DasboardLayout header="Bid Comparison">
@@ -42,22 +45,26 @@ export default function BidComparisonPage() {
                     </p>
                 </div>
 
-                <BidComparisonTable
-                    bids={dummyBids}
-                    onAccept={(bid) => {
-                        setSelectedBid(bid);
-                        setOpen(true);
-                    }}
-                />
+                {loading ? (
+                    <div className="py-20 text-center">
+                        <LoaderIcon />
+                    </div>
+                ) : (
+                    <BidComparisonTable
+                        bids={bids}
+                        onAccept={(bid) => {
+                            setSelectedBid(bid);
+                            setOpen(true);
+                        }}
+                    />
+                )}
 
                 <AcceptBidModal
                     open={open}
                     bid={selectedBid}
+                    //   loading={accepting}
                     onClose={() => setOpen(false)}
-                    onConfirm={() => {
-                        console.log("Accepted bid:", selectedBid);
-                        setOpen(false);
-                    }}
+                    onConfirm={handleAcceptConfirm}
                 />
             </div>
         </DasboardLayout>

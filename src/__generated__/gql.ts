@@ -14,12 +14,14 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "mutation AddToFavorites($quoteId: String!) {\n  addToFavorites(quoteId: $quoteId)\n}": typeof types.AddToFavoritesDocument,
     "mutation createQuote($createQuoteInput: CreateQuoteInput!) {\n  createQuote(createQuoteInput: $createQuoteInput) {\n    quoteId\n    title\n    quoteType\n    description\n    quoteMaterials\n    turnTime\n    quoteFiles\n    status\n    hasNDA\n  }\n}": typeof types.CreateQuoteDocument,
     "mutation DeleteQuote($quoteId: String!) {\n  deleteQuote(quoteId: $quoteId) {\n    status\n    message\n  }\n}": typeof types.DeleteQuoteDocument,
     "mutation LoginUser($input: LoginInput!) {\n  login(input: $input) {\n    accessToken\n    refreshToken\n    user {\n      id\n      firstName\n      lastName\n      email\n      role\n    }\n  }\n}": typeof types.LoginUserDocument,
     "mutation PlaceBidForQuote($quoteId: String!, $detailedBidInput: DetailedBidInput!) {\n  placeDetailedBid(quoteId: $quoteId, detailedBidInput: $detailedBidInput) {\n    id\n  }\n}": typeof types.PlaceBidForQuoteDocument,
     "mutation PlaceDetailedBid($quoteId: String!, $input: DetailedBidInput!) {\n  placeDetailedBid(quoteId: $quoteId, detailedBidInput: $input) {\n    id\n    amount\n    createdAt\n  }\n}": typeof types.PlaceDetailedBidDocument,
     "mutation RegisterUser($input: RegisterInput!) {\n  register(input: $input) {\n    accessToken\n    refreshToken\n    user {\n      id\n      firstName\n      lastName\n      email\n      username\n      role\n    }\n  }\n}": typeof types.RegisterUserDocument,
+    "mutation RemoveFromFavorites($quoteId: String!) {\n  removeFromFavorites(quoteId: $quoteId)\n}": typeof types.RemoveFromFavoritesDocument,
     "mutation updateQuote($updateQuoteInput: UpdateQuoteInput!, $quoteId: String!) {\n  updateQuote(updateQuoteInput: $updateQuoteInput, quoteId: $quoteId) {\n    quoteId\n    title\n    quoteType\n    description\n    quoteMaterials\n    turnTime\n    quoteFiles\n    status\n    hasNDA\n    quoteName\n  }\n}": typeof types.UpdateQuoteDocument,
     "query DetailedBidByID($bidId: String!) {\n  detailedBid(bidId: $bidId) {\n    id\n    amount\n    bidderId\n    createdAt\n    bidder {\n      id\n      firstName\n      lastName\n      email\n    }\n    additionalNotes\n    projectApproach {\n      relevantExperience\n      technicalApproach\n      estimatedTimeline\n    }\n    pricingBreakdown {\n      description\n      unitPrice\n      quantity\n      totalPrice\n    }\n  }\n}": typeof types.DetailedBidByIdDocument,
     "query DetailedBidsForQuote($quoteId: String!) {\n  detailedBidsForQuote(quoteId: $quoteId) {\n    id\n    amount\n    bidderId\n    createdAt\n    bidder {\n      id\n      firstName\n      lastName\n    }\n    additionalNotes\n    projectApproach {\n      relevantExperience\n      technicalApproach\n      estimatedTimeline\n    }\n    pricingBreakdown {\n      description\n      unitPrice\n      quantity\n      totalPrice\n    }\n  }\n}": typeof types.DetailedBidsForQuoteDocument,
@@ -31,12 +33,14 @@ type Documents = {
     "query GetAllUsers {\n  users {\n    id\n    username\n    email\n    firstName\n    lastName\n    phone\n    role\n    profile {\n      id\n      bio\n    }\n    createdAt\n    verifiedAt\n    updatedAt\n  }\n}": typeof types.GetAllUsersDocument,
 };
 const documents: Documents = {
+    "mutation AddToFavorites($quoteId: String!) {\n  addToFavorites(quoteId: $quoteId)\n}": types.AddToFavoritesDocument,
     "mutation createQuote($createQuoteInput: CreateQuoteInput!) {\n  createQuote(createQuoteInput: $createQuoteInput) {\n    quoteId\n    title\n    quoteType\n    description\n    quoteMaterials\n    turnTime\n    quoteFiles\n    status\n    hasNDA\n  }\n}": types.CreateQuoteDocument,
     "mutation DeleteQuote($quoteId: String!) {\n  deleteQuote(quoteId: $quoteId) {\n    status\n    message\n  }\n}": types.DeleteQuoteDocument,
     "mutation LoginUser($input: LoginInput!) {\n  login(input: $input) {\n    accessToken\n    refreshToken\n    user {\n      id\n      firstName\n      lastName\n      email\n      role\n    }\n  }\n}": types.LoginUserDocument,
     "mutation PlaceBidForQuote($quoteId: String!, $detailedBidInput: DetailedBidInput!) {\n  placeDetailedBid(quoteId: $quoteId, detailedBidInput: $detailedBidInput) {\n    id\n  }\n}": types.PlaceBidForQuoteDocument,
     "mutation PlaceDetailedBid($quoteId: String!, $input: DetailedBidInput!) {\n  placeDetailedBid(quoteId: $quoteId, detailedBidInput: $input) {\n    id\n    amount\n    createdAt\n  }\n}": types.PlaceDetailedBidDocument,
     "mutation RegisterUser($input: RegisterInput!) {\n  register(input: $input) {\n    accessToken\n    refreshToken\n    user {\n      id\n      firstName\n      lastName\n      email\n      username\n      role\n    }\n  }\n}": types.RegisterUserDocument,
+    "mutation RemoveFromFavorites($quoteId: String!) {\n  removeFromFavorites(quoteId: $quoteId)\n}": types.RemoveFromFavoritesDocument,
     "mutation updateQuote($updateQuoteInput: UpdateQuoteInput!, $quoteId: String!) {\n  updateQuote(updateQuoteInput: $updateQuoteInput, quoteId: $quoteId) {\n    quoteId\n    title\n    quoteType\n    description\n    quoteMaterials\n    turnTime\n    quoteFiles\n    status\n    hasNDA\n    quoteName\n  }\n}": types.UpdateQuoteDocument,
     "query DetailedBidByID($bidId: String!) {\n  detailedBid(bidId: $bidId) {\n    id\n    amount\n    bidderId\n    createdAt\n    bidder {\n      id\n      firstName\n      lastName\n      email\n    }\n    additionalNotes\n    projectApproach {\n      relevantExperience\n      technicalApproach\n      estimatedTimeline\n    }\n    pricingBreakdown {\n      description\n      unitPrice\n      quantity\n      totalPrice\n    }\n  }\n}": types.DetailedBidByIdDocument,
     "query DetailedBidsForQuote($quoteId: String!) {\n  detailedBidsForQuote(quoteId: $quoteId) {\n    id\n    amount\n    bidderId\n    createdAt\n    bidder {\n      id\n      firstName\n      lastName\n    }\n    additionalNotes\n    projectApproach {\n      relevantExperience\n      technicalApproach\n      estimatedTimeline\n    }\n    pricingBreakdown {\n      description\n      unitPrice\n      quantity\n      totalPrice\n    }\n  }\n}": types.DetailedBidsForQuoteDocument,
@@ -65,6 +69,10 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "mutation AddToFavorites($quoteId: String!) {\n  addToFavorites(quoteId: $quoteId)\n}"): (typeof documents)["mutation AddToFavorites($quoteId: String!) {\n  addToFavorites(quoteId: $quoteId)\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "mutation createQuote($createQuoteInput: CreateQuoteInput!) {\n  createQuote(createQuoteInput: $createQuoteInput) {\n    quoteId\n    title\n    quoteType\n    description\n    quoteMaterials\n    turnTime\n    quoteFiles\n    status\n    hasNDA\n  }\n}"): (typeof documents)["mutation createQuote($createQuoteInput: CreateQuoteInput!) {\n  createQuote(createQuoteInput: $createQuoteInput) {\n    quoteId\n    title\n    quoteType\n    description\n    quoteMaterials\n    turnTime\n    quoteFiles\n    status\n    hasNDA\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -86,6 +94,10 @@ export function gql(source: "mutation PlaceDetailedBid($quoteId: String!, $input
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation RegisterUser($input: RegisterInput!) {\n  register(input: $input) {\n    accessToken\n    refreshToken\n    user {\n      id\n      firstName\n      lastName\n      email\n      username\n      role\n    }\n  }\n}"): (typeof documents)["mutation RegisterUser($input: RegisterInput!) {\n  register(input: $input) {\n    accessToken\n    refreshToken\n    user {\n      id\n      firstName\n      lastName\n      email\n      username\n      role\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation RemoveFromFavorites($quoteId: String!) {\n  removeFromFavorites(quoteId: $quoteId)\n}"): (typeof documents)["mutation RemoveFromFavorites($quoteId: String!) {\n  removeFromFavorites(quoteId: $quoteId)\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

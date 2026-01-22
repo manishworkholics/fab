@@ -39,9 +39,8 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/pm/rfq/:quoteId/bids" element={<BidComparisonPage />} />
-        <Route path="/pm/po/:quoteId" element={<POPage />} />
-        <Route path="/ems/bids" element={<EMSBidsPage />} />
+
+
 
         <Route index element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -72,6 +71,10 @@ function App() {
           <Route path="/pm/rfq/quotation/:id/bid/:bidId/hire" element={<IssuePOForm />} />
           <Route path="/pm/new-projects" element={<NewProjects />} />
           <Route path="/pm/new-projects/:id" element={<ProjectInView />} />
+
+          <Route path="/pm/rfq/quotation/:id/bids" element={<BidComparisonPage />} />
+          <Route path="/pm/po/:quoteId" element={<POPage />} />
+          <Route path="/ems/bids" element={<EMSBidsPage />} />
           {/* EMS Routes */}
           <Route path="/ems/manage-quote" element={<QuoteManagement />} />
           <Route path="/ems/manage-quote/:id" element={<EmsSingleQuoteView />} />
