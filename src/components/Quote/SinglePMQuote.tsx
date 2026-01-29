@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DasboardLayout from "../../pages/Dasboard/layout";
 import PlusCircleIcon from "../icons/PlusCircleIcon"; 
 import { GetQuoteQuery } from "@/__generated__/graphql";
 import QuoteView from "./QuoteView";
 import QuoteSubmissionsReview from "./QuoteSubmissionsReview";
+import HiredBidderView from "./HiredBidderView";
+
 interface SingleEMSQuoteProps {
   data: GetQuoteQuery["quote"] | undefined;
   isLoading: boolean;
@@ -11,6 +13,14 @@ interface SingleEMSQuoteProps {
 
 const SinglePMQuote = ({ isLoading, data }: SingleEMSQuoteProps) => {
   const [active, setActive] = useState("View");
+
+  useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  if (params.get("tab") === "hire") {
+    setActive("Hire");
+  }
+}, []);
+
   return (
     <DasboardLayout>
       <div className="flex-1 flex flex-col w-full">
@@ -80,6 +90,8 @@ const SinglePMQuote = ({ isLoading, data }: SingleEMSQuoteProps) => {
 
       {active === "View" && <QuoteView data={data || undefined} isLoading={isLoading} />}
       {active === "Review" && <QuoteSubmissionsReview />}
+      {active === "Hire" && <HiredBidderView quote={data} />}
+
     </DasboardLayout>
   );
 };

@@ -1,9 +1,14 @@
-import { useMutation } from "@apollo/client";
-import { gql } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 
 const ACCEPT_BID = gql`
   mutation AcceptQuoteBid($bidId: String!) {
-    acceptQuoteBid(bidId: $bidId)
+    acceptQuoteBid(bidId: $bidId) {
+      id
+      quoteId
+      status
+      pmId
+      emsId
+    }
   }
 `;
 

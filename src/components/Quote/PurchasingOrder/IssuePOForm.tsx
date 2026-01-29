@@ -51,7 +51,7 @@ export default function IssuePOForm() {
           <Button
             variant="ghost" 
             size="icon"
-            onClick={() => navigate(`/pm/rfq/quotation/${id}/bidders`)}
+            onClick={() => navigate(`/pm/rfq/quotation/${id}?tab=hire`)}
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>

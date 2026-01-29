@@ -1,0 +1,19 @@
+query ProjectDetail($projectId: Int!) {
+  projectDetail(projectId: $projectId) {
+    id
+    status
+    quote {
+      quoteId
+      title
+    }
+    purchaseOrder {
+      id
+      vendorName
+      total
+    }
+    history {
+      status
+      createdAt
+    }
+  }
+}

@@ -3,15 +3,32 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ChevronDown, Phone, Mail, MapPin, ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { ProjectDetailDocument } from "@/__generated__/graphql";
+import LoaderIcon from "@/components/icons/LoaderIcon";
+
 
 export function ProjectDetail() {
+
   const navigate = useNavigate();
+  const { projectId } = useParams<{ projectId: string }>();
+
+  const { data, loading } = useQuery(ProjectDetailDocument, {
+    variables: { projectId: Number(projectId) },
+    skip: !projectId,
+  });
+
+  const project = data?.projectDetail;
+
+  if (loading) return <LoaderIcon />;
+  if (!project) return <div className="p-10 text-center">Project not found</div>;
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <Button variant="ghost" onClick={() => navigate("/pm/new-projects")} className="text-gray-600" text="Back to Projects" />
+        <Button variant="ghost" onClick={() => navigate("/pm/projects")} className="text-gray-600" text="Back to Projects" />
         <Button variant="outline" text="Actions" leftIcon={<ChevronDown className="w-4 h-4 mr-2" />} />
       </div>
 
@@ -24,11 +41,13 @@ export function ProjectDetail() {
                 <div className="w-6 h-6 bg-orange-500 rounded"></div>
               </div>
               <div>
-                <h1 className="text-xl font-semibold">Protronics</h1>
-                <p className="text-gray-600">Project ID: 106980</p>
+                <h1 className="text-xl font-semibold">{project.quote.title}</h1>
+                <p className="text-gray-600">Project ID: {project.id}</p>
+
               </div>
             </div>
-            <Badge className="bg-green-100 text-green-700 hover:bg-green-100">Active</Badge>
+            <Badge>{project.status}</Badge>
+
           </div>
 
           <div className="grid grid-cols-5 gap-6">
@@ -43,7 +62,8 @@ export function ProjectDetail() {
             </div>
             <div>
               <p className="text-sm text-gray-500 mb-1">Project Type</p>
-              <p className="font-medium">PCB Assembly</p>
+              <p className="font-medium">{project.quote.title}</p>
+
             </div>
             <div>
               <p className="text-sm text-gray-500 mb-1">Project Start Date</p>
@@ -105,6 +125,18 @@ export function ProjectDetail() {
               <span className="text-sm text-gray-400">Step Name</span>
             </div>
           </div>
+
+          <div className="flex flex-wrap gap-4 mb-6">
+            {project.history.map((h, idx) => (
+              <div key={idx} className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                </div>
+                <span className="text-sm font-medium">{h.status}</span>
+              </div>
+            ))}
+          </div>
+
 
           <div>
             <h3 className="font-medium mb-2">Additional Notes</h3>

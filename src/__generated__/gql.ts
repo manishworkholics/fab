@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "mutation acceptQuoteBid($bidId: String!) {\n  acceptQuoteBid(bidId: $bidId) {\n    id\n    quoteId\n    status\n    pmId\n    emsId\n  }\n}": typeof types.AcceptQuoteBidDocument,
     "mutation AddToFavorites($quoteId: String!) {\n  addToFavorites(quoteId: $quoteId)\n}": typeof types.AddToFavoritesDocument,
     "mutation createQuote($createQuoteInput: CreateQuoteInput!) {\n  createQuote(createQuoteInput: $createQuoteInput) {\n    quoteId\n    title\n    quoteType\n    description\n    quoteMaterials\n    turnTime\n    quoteFiles\n    status\n    hasNDA\n  }\n}": typeof types.CreateQuoteDocument,
     "mutation DeleteQuote($quoteId: String!) {\n  deleteQuote(quoteId: $quoteId) {\n    status\n    message\n  }\n}": typeof types.DeleteQuoteDocument,
@@ -30,9 +31,12 @@ type Documents = {
     "query GetQuote($quoteId: String!) {\n  quote(quoteId: $quoteId) {\n    quoteId\n    title\n    description\n    quoteType\n    quoteMaterials\n    quoteFiles\n    budget\n    turnTime\n    status\n    isArchived\n    createdAt\n    quoteName\n    updatedAt\n    userSignedNDA\n    hasNDA\n    user {\n      id\n      username\n      firstName\n      lastName\n    }\n    assignedEMS {\n      id\n      role\n      username\n    }\n    bids {\n      bidderId\n      amount\n      createdAt\n    }\n  }\n}": typeof types.GetQuoteDocument,
     "query GetQuotes($params: FindAllQuotesInput) {\n  quotes(params: $params) {\n    quotes {\n      quoteId\n      description\n      title\n      quoteMaterials\n      turnTime\n      quoteFiles\n      quoteType\n      status\n      budget\n      assignedEMSId\n      isArchived\n      userSignedNDA\n      quoteName\n      hasNDA\n      bids {\n        bidderId\n        amount\n      }\n      user {\n        id\n        username\n        email\n        firstName\n        lastName\n        phone\n        role\n        profile {\n          id\n          bio\n          location\n          jobRole\n          projectBuildType\n        }\n      }\n      updatedAt\n      createdAt\n    }\n    totalCount\n  }\n}": typeof types.GetQuotesDocument,
     "query MyFavoriteQuotes {\n  myFavoriteQuotes {\n    quoteId\n    title\n    status\n    budget\n    createdAt\n    user {\n      id\n      email\n    }\n  }\n}": typeof types.MyFavoriteQuotesDocument,
+    "query MyProjectsAsPM {\n  myProjectsAsPM {\n    id\n    status\n    createdAt\n    quote {\n      quoteId\n      title\n      status\n    }\n    ems {\n      id\n      firstName\n      lastName\n      email\n    }\n    history {\n      status\n      createdAt\n      note\n    }\n  }\n}": typeof types.MyProjectsAsPmDocument,
+    "query ProjectDetail($projectId: Int!) {\n  projectDetail(projectId: $projectId) {\n    id\n    status\n    quote {\n      quoteId\n      title\n    }\n    purchaseOrder {\n      id\n      vendorName\n      total\n    }\n    history {\n      status\n      createdAt\n    }\n  }\n}": typeof types.ProjectDetailDocument,
     "query GetAllUsers {\n  users {\n    id\n    username\n    email\n    firstName\n    lastName\n    phone\n    role\n    profile {\n      id\n      bio\n    }\n    createdAt\n    verifiedAt\n    updatedAt\n  }\n}": typeof types.GetAllUsersDocument,
 };
 const documents: Documents = {
+    "mutation acceptQuoteBid($bidId: String!) {\n  acceptQuoteBid(bidId: $bidId) {\n    id\n    quoteId\n    status\n    pmId\n    emsId\n  }\n}": types.AcceptQuoteBidDocument,
     "mutation AddToFavorites($quoteId: String!) {\n  addToFavorites(quoteId: $quoteId)\n}": types.AddToFavoritesDocument,
     "mutation createQuote($createQuoteInput: CreateQuoteInput!) {\n  createQuote(createQuoteInput: $createQuoteInput) {\n    quoteId\n    title\n    quoteType\n    description\n    quoteMaterials\n    turnTime\n    quoteFiles\n    status\n    hasNDA\n  }\n}": types.CreateQuoteDocument,
     "mutation DeleteQuote($quoteId: String!) {\n  deleteQuote(quoteId: $quoteId) {\n    status\n    message\n  }\n}": types.DeleteQuoteDocument,
@@ -49,6 +53,8 @@ const documents: Documents = {
     "query GetQuote($quoteId: String!) {\n  quote(quoteId: $quoteId) {\n    quoteId\n    title\n    description\n    quoteType\n    quoteMaterials\n    quoteFiles\n    budget\n    turnTime\n    status\n    isArchived\n    createdAt\n    quoteName\n    updatedAt\n    userSignedNDA\n    hasNDA\n    user {\n      id\n      username\n      firstName\n      lastName\n    }\n    assignedEMS {\n      id\n      role\n      username\n    }\n    bids {\n      bidderId\n      amount\n      createdAt\n    }\n  }\n}": types.GetQuoteDocument,
     "query GetQuotes($params: FindAllQuotesInput) {\n  quotes(params: $params) {\n    quotes {\n      quoteId\n      description\n      title\n      quoteMaterials\n      turnTime\n      quoteFiles\n      quoteType\n      status\n      budget\n      assignedEMSId\n      isArchived\n      userSignedNDA\n      quoteName\n      hasNDA\n      bids {\n        bidderId\n        amount\n      }\n      user {\n        id\n        username\n        email\n        firstName\n        lastName\n        phone\n        role\n        profile {\n          id\n          bio\n          location\n          jobRole\n          projectBuildType\n        }\n      }\n      updatedAt\n      createdAt\n    }\n    totalCount\n  }\n}": types.GetQuotesDocument,
     "query MyFavoriteQuotes {\n  myFavoriteQuotes {\n    quoteId\n    title\n    status\n    budget\n    createdAt\n    user {\n      id\n      email\n    }\n  }\n}": types.MyFavoriteQuotesDocument,
+    "query MyProjectsAsPM {\n  myProjectsAsPM {\n    id\n    status\n    createdAt\n    quote {\n      quoteId\n      title\n      status\n    }\n    ems {\n      id\n      firstName\n      lastName\n      email\n    }\n    history {\n      status\n      createdAt\n      note\n    }\n  }\n}": types.MyProjectsAsPmDocument,
+    "query ProjectDetail($projectId: Int!) {\n  projectDetail(projectId: $projectId) {\n    id\n    status\n    quote {\n      quoteId\n      title\n    }\n    purchaseOrder {\n      id\n      vendorName\n      total\n    }\n    history {\n      status\n      createdAt\n    }\n  }\n}": types.ProjectDetailDocument,
     "query GetAllUsers {\n  users {\n    id\n    username\n    email\n    firstName\n    lastName\n    phone\n    role\n    profile {\n      id\n      bio\n    }\n    createdAt\n    verifiedAt\n    updatedAt\n  }\n}": types.GetAllUsersDocument,
 };
 
@@ -66,6 +72,10 @@ const documents: Documents = {
  */
 export function gql(source: string): unknown;
 
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation acceptQuoteBid($bidId: String!) {\n  acceptQuoteBid(bidId: $bidId) {\n    id\n    quoteId\n    status\n    pmId\n    emsId\n  }\n}"): (typeof documents)["mutation acceptQuoteBid($bidId: String!) {\n  acceptQuoteBid(bidId: $bidId) {\n    id\n    quoteId\n    status\n    pmId\n    emsId\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -130,6 +140,14 @@ export function gql(source: "query GetQuotes($params: FindAllQuotesInput) {\n  q
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "query MyFavoriteQuotes {\n  myFavoriteQuotes {\n    quoteId\n    title\n    status\n    budget\n    createdAt\n    user {\n      id\n      email\n    }\n  }\n}"): (typeof documents)["query MyFavoriteQuotes {\n  myFavoriteQuotes {\n    quoteId\n    title\n    status\n    budget\n    createdAt\n    user {\n      id\n      email\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query MyProjectsAsPM {\n  myProjectsAsPM {\n    id\n    status\n    createdAt\n    quote {\n      quoteId\n      title\n      status\n    }\n    ems {\n      id\n      firstName\n      lastName\n      email\n    }\n    history {\n      status\n      createdAt\n      note\n    }\n  }\n}"): (typeof documents)["query MyProjectsAsPM {\n  myProjectsAsPM {\n    id\n    status\n    createdAt\n    quote {\n      quoteId\n      title\n      status\n    }\n    ems {\n      id\n      firstName\n      lastName\n      email\n    }\n    history {\n      status\n      createdAt\n      note\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query ProjectDetail($projectId: Int!) {\n  projectDetail(projectId: $projectId) {\n    id\n    status\n    quote {\n      quoteId\n      title\n    }\n    purchaseOrder {\n      id\n      vendorName\n      total\n    }\n    history {\n      status\n      createdAt\n    }\n  }\n}"): (typeof documents)["query ProjectDetail($projectId: Int!) {\n  projectDetail(projectId: $projectId) {\n    id\n    status\n    quote {\n      quoteId\n      title\n    }\n    purchaseOrder {\n      id\n      vendorName\n      total\n    }\n    history {\n      status\n      createdAt\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -9,10 +9,16 @@ import { Separator } from "../ui/Separator";
 import DasboardLayout from "../../pages/Dasboard/layout";
 import { useQuery } from "@apollo/client";
 import { DetailedBidByIdDocument } from "@/__generated__/graphql";
+import { useState } from "react";
+import { useAcceptQuoteBid } from "@/grahpql/hooks/useAcceptQuoteBid";
 
 export default function QuoteBidView() {
   const { id, bidId } = useParams();
   const navigate = useNavigate();
+
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const { acceptBid, loading: accepting } = useAcceptQuoteBid();
+
 
   const { data, loading } = useQuery(DetailedBidByIdDocument, {
     variables: { bidId: bidId || "" },
@@ -192,17 +198,61 @@ export default function QuoteBidView() {
 
           {/* Action Buttons */}
           <div className="flex gap-4 mt-6">
-            <Button
-              onClick={() => navigate(`/pm/rfq/quotation/${id}/bid/${bidId}/hire`)}
-            >
+            <Button onClick={() => setOpenConfirm(true)}>
               Hire This Bidder
             </Button>
+
             <Button variant="outline" onClick={() => navigate(`/pm/rfq/quotation/${id}`)}>
               Back to Bidders
             </Button>
           </div>
         </div>
       </div>
+
+
+      {openConfirm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 w-[420px] shadow-lg">
+            <h2 className="text-lg font-semibold mb-2">Confirm Hiring</h2>
+
+            <p className="text-sm text-gray-600 mb-6">
+              Are you sure you want to hire this bidder? This will assign the quote and continue to Purchase Order.
+            </p>
+
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="outline"
+                text="Cancel"
+                onClick={() => setOpenConfirm(false)}
+              />
+
+              <Button
+                text={accepting ? "Processing..." : "Yes, Hire"}
+                disabled={accepting}
+                onClick={async () => {
+                  if (!bidId) return;
+
+                  try {
+                    const res = await acceptBid(bidId);
+
+                    if (res?.data?.acceptQuoteBid) {
+                      setOpenConfirm(false);
+
+                      // redirect to purchase order page
+                      navigate(`/pm/rfq/quotation/${id}/bid/${bidId}/hire`);
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    alert("Failed to accept bid");
+                  }
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+
     </DasboardLayout>
   );
 }

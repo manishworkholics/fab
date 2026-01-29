@@ -34,6 +34,8 @@ import EMSProfile from "./pages/EMSProfile";
 import BidComparisonPage from "./pages/Dasboard/pm/rfq/[quoteId]/bids";
 import POPage from "./pages/Dasboard/pm/po/[quoteId]";
 import EMSBidsPage from "./pages/Dasboard/ems/bids";
+import ProjectDetailPage from "./pages/Dasboard/pm/projects/ProjectDetailPage";
+
 
 function App() {
   return (
@@ -75,6 +77,8 @@ function App() {
           <Route path="/pm/rfq/quotation/:id/bids" element={<BidComparisonPage />} />
           <Route path="/pm/po/:quoteId" element={<POPage />} />
           <Route path="/ems/bids" element={<EMSBidsPage />} />
+
+          <Route path="/pm/projects/:projectId" element={<ProjectDetailPage />} />
           {/* EMS Routes */}
           <Route path="/ems/manage-quote" element={<QuoteManagement />} />
           <Route path="/ems/manage-quote/:id" element={<EmsSingleQuoteView />} />

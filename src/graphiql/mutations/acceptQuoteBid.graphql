@@ -1,0 +1,9 @@
+mutation acceptQuoteBid($bidId: String!) {
+  acceptQuoteBid(bidId: $bidId) {
+    id
+    quoteId
+    status
+    pmId
+    emsId
+  }
+}

@@ -1,0 +1,23 @@
+query MyProjectsAsPM {
+  myProjectsAsPM {
+    id
+    status
+    createdAt
+    quote {
+      quoteId
+      title
+      status
+    }
+    ems {
+      id
+      firstName
+      lastName
+      email
+    }
+    history {
+      status
+      createdAt
+      note
+    }
+  }
+}
