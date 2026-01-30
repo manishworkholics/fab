@@ -31,5 +31,9 @@ query GetQuote($quoteId: String!) {
       amount
       createdAt
     }
+    project {
+      id
+      status
+    }
   }
 }

@@ -2,17 +2,43 @@ query ProjectDetail($projectId: Int!) {
   projectDetail(projectId: $projectId) {
     id
     status
+
     quote {
       quoteId
       title
+      description
+      turnTime
+      budget
+      quoteType
     }
+
+    pm {
+      id
+      firstName
+      lastName
+      email
+      phone
+    }
+
+    ems {
+      id
+      firstName
+      lastName
+      email
+      phone
+    }
+
     purchaseOrder {
       id
       vendorName
+      subtotal
+      tax
       total
     }
+
     history {
       status
+      note
       createdAt
     }
   }

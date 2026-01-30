@@ -131,8 +131,8 @@ const RFQ = () => {
               active === "PENDING"
                 ? "Pending Quotes"
                 : active === "COMPLETED"
-                ? "Completed Quotes"
-                : "Active Quotes"
+                  ? "Completed Quotes"
+                  : "Active Quotes"
             }
             onDeleteSuccess={handleDeleteSuccess}
           />

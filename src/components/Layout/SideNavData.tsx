@@ -46,8 +46,9 @@ export const sideNavData: Item[] = [
     name: "Projects",
     icon: <BagIcon width="16px" height="16px" fill="#344054" />,
     label: "/pm/projects",
-    role: [APP_ROLES.FABS_EMS, APP_ROLES.FABS_PM],
+    role: [ APP_ROLES.FABS_PM],
   },
+  
   {
     id: 6,
     name: "Messages",
@@ -80,5 +81,12 @@ export const sideNavData: Item[] = [
     icon: <NoteHalfIcon />,
     label: "/bom-checker",
     role: [APP_ROLES.FABS_BOM, APP_ROLES.FABS_PM],
+  },
+  {
+    id: 10,
+    name: "MyProjects",
+    icon: <BagIcon width="16px" height="16px" fill="#344054" />,
+    label: "/ems/projects",
+    role: [APP_ROLES.FABS_EMS],
   },
 ];

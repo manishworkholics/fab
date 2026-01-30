@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dasboard from "./pages/Dasboard";
 import Project from "./pages/Dasboard/pm/projects";
+import EmsProject from "./pages/Dasboard/ems/project";
 import RFQ from "./pages/Dasboard/pm/rfq";
 import PCB from "./pages/Dasboard/pm/rfq/quotation/pcb";
 import Talent from "./pages/Talent";
@@ -35,6 +36,7 @@ import BidComparisonPage from "./pages/Dasboard/pm/rfq/[quoteId]/bids";
 import POPage from "./pages/Dasboard/pm/po/[quoteId]";
 import EMSBidsPage from "./pages/Dasboard/ems/bids";
 import ProjectDetailPage from "./pages/Dasboard/pm/projects/ProjectDetailPage";
+import EmsProjectDetailPage from "./pages/Dasboard/ems/project/EmsProjectDetailPage";
 
 
 function App() {
@@ -70,7 +72,7 @@ function App() {
           <Route path="/pm/new-quote/preview" element={<PreviewQuotePage />} />
           <Route path="/pm/new-quote" element={<CreateQuotePage />} />
           <Route path="/pm/rfq/quotation/:id/bid/:bidId" element={<QuoteBidView />} />
-          <Route path="/pm/rfq/quotation/:id/bid/:bidId/hire" element={<IssuePOForm />} />
+          <Route path="/pm/rfq/quotation/:id/bid/hire" element={<IssuePOForm />} />
           <Route path="/pm/new-projects" element={<NewProjects />} />
           <Route path="/pm/new-projects/:id" element={<ProjectInView />} />
 
@@ -80,6 +82,8 @@ function App() {
 
           <Route path="/pm/projects/:projectId" element={<ProjectDetailPage />} />
           {/* EMS Routes */}
+          <Route path="/ems/projects" element={<EmsProject />} />
+          <Route path="/ems/projects/:projectId" element={<EmsProjectDetailPage />} />
           <Route path="/ems/manage-quote" element={<QuoteManagement />} />
           <Route path="/ems/manage-quote/:id" element={<EmsSingleQuoteView />} />
           <Route path="/view-ems" element={<EMSView />} />

@@ -26,20 +26,7 @@ export default function QuoteView({data, isLoading}: {data: GetQuoteQuery["quote
             </li>
           </ul>
         </div>
-        {/* <div className="flex gap-3 items-center">
-          <div className="flex items-center gap-1">
-            <SearchBar placeHolderText={"Search"} textIcon onChange={() => {}} />
-          </div>
-          <div className="flex items-center gap-1 ">
-            {" "}
-            <FilterIcon />
-            <span className="text-[#667185] text-[14px]">Filter</span>
-          </div>
-          <div className="flex items-center gap-1 cursor-pointer">
-            <SortIcon />
-            <span className="text-[#667185] text-[14px]">{"Sort"}</span>
-          </div>
-        </div> */}
+        
       </div>
       {isLoading && (
         <p className="py-20 text-center">

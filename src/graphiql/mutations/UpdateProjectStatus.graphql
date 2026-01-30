@@ -1,0 +1,14 @@
+mutation UpdateProjectStatus(
+  $projectId: Int!
+  $input: UpdateProjectStatusInput!
+) {
+  updateProjectStatus(projectId: $projectId, input: $input) {
+    id
+    status
+    history {
+      status
+      note
+      createdAt
+    }
+  }
+}

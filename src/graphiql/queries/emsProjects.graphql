@@ -1,0 +1,17 @@
+query EmsProjects {
+  emsProjects {
+    id
+    status
+    createdAt
+    quote {
+      quoteId
+      title
+    }
+    pm {
+      id
+      firstName
+      lastName
+      email
+    }
+  }
+}

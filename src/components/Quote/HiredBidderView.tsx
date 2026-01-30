@@ -9,6 +9,7 @@ export default function HiredBidderView({ quote }: { quote: any }) {
   const navigate = useNavigate();
 
   const ems = quote?.assignedEMS;
+  const project = quote?.project;
   const bid = quote?.bids?.find((b: any) => b.bidderId == ems?.id);
 
   if (!ems) {
@@ -67,8 +68,8 @@ export default function HiredBidderView({ quote }: { quote: any }) {
                 <Button
                   size="sm"
                   onClick={() =>
-                    navigate(`/pm/rfq/quotation/D6D4142FFABS/bid/77e68f78-ff24-4c0e-a04b-852aa667e0c4/hire`)
-                    
+                    navigate(`/pm/rfq/quotation/${project?.id}/bid/hire`)
+
                   }
                 >
                   Create Purchase Order
@@ -78,7 +79,7 @@ export default function HiredBidderView({ quote }: { quote: any }) {
                   size="sm"
                   variant="outline"
                   onClick={() =>
-                    navigate(`/pm/projects/${quote.quoteId}`)
+                    navigate(`/pm/projects/${project?.id}`)
                   }
                 >
                   View Project

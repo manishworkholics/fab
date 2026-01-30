@@ -150,13 +150,13 @@ export default function QuoteBidView() {
                       />
                     </div>
                     <div className="col-span-3">
-                      {/* <Input
+                      <Input
                         type="number"
-                        value={item.price}
+                        value={item.unitPrice}
                         placeholder="0.00"
                         readOnly
                         className="bg-muted/30"
-                      /> */}
+                      />
                     </div>
                     <div className="col-span-3">
                       <Input
@@ -239,7 +239,7 @@ export default function QuoteBidView() {
                       setOpenConfirm(false);
 
                       // redirect to purchase order page
-                      navigate(`/pm/rfq/quotation/${id}/bid/${bidId}/hire`);
+                      navigate(`/pm/rfq/quotation/${res?.data?.acceptQuoteBid?.id}/bid/hire`);
                     }
                   } catch (err) {
                     console.error(err);

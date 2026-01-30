@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import CaretDownIcon from "../icons/CaretDownIcon";
-import { Link} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MenuIcon from "../icons/MenuIcon";
 import CloseIcon from "../icons/CloseIcon";
 import WaitlistModal from "../../pages/Dasboard/WaitlistModal";
@@ -45,12 +45,12 @@ const DropdownMenu = ({ title, items }: { title: string; items: { name: string; 
 };
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
- 
+  const navigate = useNavigate();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
- 
- 
+
+
   return (
     <nav className="container m-auto  bg-white px-2 lg:px-0">
       <div className="flex items-center justify-between py-9">
@@ -77,7 +77,7 @@ const Navbar = () => {
               <DropdownMenu
                 key={idx}
                 title={item.title}
-                items={item.dropdown}              />
+                items={item.dropdown} />
             ) : (
               <li
                 key={idx}
@@ -90,9 +90,29 @@ const Navbar = () => {
         </ul>
         {/* Right Section */}
         <div className="hidden lg:flex items-center">
-          <WaitlistModal text="Get Early Access + Demo" width="w-[235px] px-5" />
+          <div className="flex gap-4">
+            <button
+              onClick={() => navigate("/login")}
+              className="px-4 py-2 text-orange-500 border border-[#EB5017] rounded-md 
+                 flex items-center justify-center gap-2
+                 hover:bg-orange-50 hover:font-medium transition"
+            >
+              Login
+            </button>
+
+            <button
+              onClick={() => navigate("/register")}
+              className="px-4 py-2 bg-orange-500 text-white rounded-md 
+                 hover:bg-orange-600 transition"
+            >
+              Sign Up
+            </button>
+          </div>
         </div>
+
       </div>
+
+
 
       {isMenuOpen && (
         <div className="fixed h-[100vh] top-16 left-0 w-full bg-white shadow-md lg:hidden">
@@ -110,7 +130,9 @@ const Navbar = () => {
 
             <li className="text-black cursor-pointer hover:font-medium">Pricing</li>
             <li className="text-black cursor-pointer hover:font-medium">Company</li>
+
           </ul>
+
           <div className="flex flex-col space-y-4 p-6 w-full">
             <WaitlistModal />
           </div>

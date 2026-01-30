@@ -46,7 +46,7 @@ const PreviewCard = ({
               <h4 className="text-[14px] text-[#101928] mb-1 font-semibold">
                 Desired Turn Time
               </h4>
-              <p className="text-[14px] text-[#101928]">{turnTime}</p>
+              <p className="text-[14px] text-[#101928]">{turnTime} Days</p>
             </div>
             <div className="border p-4 mt-2">
               <h4 className="text-[14px] text-[#101928] mb-1 font-semibold">
@@ -63,12 +63,7 @@ const PreviewCard = ({
                 {quoteFiles.map((file) => (
                   <div className="flex items-center bg-[#ffffff] border md:w-[20%] justify-between px-3 py-3 rounded-lg">
                     <span className="text-[#1671D9] text-[14px]">{file}</span>
-                    {/* <button className="ml-2">
-                  <X
-                    size={14}
-                    className="text-gray-600 hover:text-gray-800"
-                  />
-                </button> */}
+
                   </div>
                 ))}
               </div>

@@ -1,7 +1,7 @@
 import { CodegenConfig } from "@graphql-codegen/cli";
 
 
-const schema = "http://localhost:9001/graphql";
+const schema = "https://www.fabspaceai.com/api/graphql";
 
 
 const config: CodegenConfig = {

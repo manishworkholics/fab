@@ -1,0 +1,19 @@
+query ProjectDetailForPO($projectId: Int!) {
+  projectDetail(projectId: $projectId) {
+    id
+    status
+    purchaseOrder {
+      id
+      vendorName
+      items {
+        description
+        quantity
+        unitPrice
+        totalPrice
+      }
+      subtotal
+      tax
+      total
+    }
+  }
+}
