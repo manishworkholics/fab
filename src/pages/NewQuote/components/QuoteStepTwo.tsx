@@ -80,15 +80,18 @@ export default function QuoteStepTwo({ handleStepChange }: QuoteStepTwoProps) {
       </div>
       <div className="my-4 w-full flex justify-end gap-4">
         <Button text="Previous" handleClick={() => handleStepChange(1)} />
-        <Button 
-          text="Next" 
+        <Button
+          text="Next"
           handleClick={() => {
             addToLocalStorage(
-              "quoteData", 
+              "quoteData",
               {
                 quoteMaterials: formik.values.quoteMaterials,
                 turnTime: formik.values.turnTime,
                 pcbBoards: Number(formik.values.boards),
+                numberOfBoards: Number(formik.values.boards)
+
+
               },
               "merge"
             )
@@ -97,7 +100,7 @@ export default function QuoteStepTwo({ handleStepChange }: QuoteStepTwoProps) {
             if (quoteData && quoteData.quoteMaterials && quoteData.turnTime) {
               handleStepChange(3);
             }
-          }} 
+          }}
         />
       </div>
     </div>

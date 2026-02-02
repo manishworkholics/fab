@@ -177,7 +177,7 @@ const QuoteManagement = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {quotes.map((item: any) => (
-                  <QuoteCard key={item.quoteId} {...item} isSaved={favoriteIds.has(item.quoteId)} onFavoriteChanged={refetch}/>
+                  <QuoteCard key={item.quoteId} {...item} isSaved={favoriteIds.has(item.quoteId)} onFavoriteChanged={refetch} turnTime={item.turnTime} boards={item.pcbBoards} />
                 ))}
               </div>
             )}
@@ -206,10 +206,11 @@ const QuoteManagement = () => {
                     title={fav.title}
                     status={fav.status}
                     budget={fav.budget}
-                    createdAt={fav.createdAt}
-                    isSaved={true}
-                    
+                    isSaved
+                    turnTime={fav.turnTime}
+
                   />
+
                 ))}
               </div>
             )}
@@ -238,9 +239,10 @@ const QuoteManagement = () => {
                     title={bid.quote.title}
                     status={bid.status}
                     price={bid.amount}
-                    submittedAt={bid.createdAt}
                     isSubmitted
                     isSaved={favoriteIds.has(bid.quote.quoteId)}
+                    turnTime={bid.quote.turnTime}
+
                   />
                 ))}
               </div>

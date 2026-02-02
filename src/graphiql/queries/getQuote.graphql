@@ -8,6 +8,8 @@ query GetQuote($quoteId: String!) {
     quoteFiles
     budget
     turnTime
+    pcbBoards
+numberOfBoards
     status
     isArchived
     createdAt

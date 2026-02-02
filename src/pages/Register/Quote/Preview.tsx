@@ -172,8 +172,7 @@ const Preview = () => {
                 quoteFiles={formik.values.quoteFiles}
                 isEMSId={isEMSId}
                 isNdaRequired={isNdaRequired}
-                handleToggle={handleToggle}
-              >
+                handleToggle={handleToggle} quoteMaterialsList={[]}              >
                 <div className="flex gap-4 flex-col md:flex-row">
                   {["OPEN_QUOTE", "FIXED_QUOTE"].map((type) => (
                     <div

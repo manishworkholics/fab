@@ -1,232 +1,50 @@
-// import { useState } from "react";
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-// import Button from "@/components/ui/Buttons";
-// import { Badge } from "@/components/ui/Badge";
-// import QuoteBidForm from "@/components/QuoteBidForm";
-// import { useNavigate } from "react-router-dom";
-// import DasboardLayout from "@/pages/Dasboard/layout";
-
-// const EmsBidPage = () => {
-//   const [showBidForm, setShowBidForm] = useState(false);
-//   const navigate = useNavigate();
-//   // Find the quote data
-//   const quote = {
-//     id: "Q001",
-//     title: "PCB Assembly - IoT Device",
-//     description: "High-frequency PCB assembly for IoT sensor device with BLE connectivity",
-//     postedDate: "2024-01-15",
-//     deadline: "2024-02-15",
-//     budget: "$5,000 - $8,000",
-//     status: "Open",
-//     bidsCount: 12,
-//     category: "PCB Assembly",
-//     complexity: "Medium",
-//   };
-
-//   if (!quote) return null;
-
-//   if (showBidForm) {
-//     return <QuoteBidForm quote={quote} onBack={() => setShowBidForm(false)} />;
-//   }
-
-//   return (
-//     <DasboardLayout>
-//       <div className="p-6 space-y-6">
-//         <div className="flex items-center gap-4">
-//           <Button
-//             variant="outline"
-//             onClick={() => navigate("/ems/manage-quote")}
-//             text="← Back to Quotes"
-//             width="w-full"
-//           />
-//           <h1 className="text-2xl font-bold">{quote.title}</h1>
-//           <Badge variant={quote.status === "Open" ? "default" : "secondary"}>{quote.status}</Badge>
-//         </div>
-
-//         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-//           {/* Main Content */}
-//           <div className="lg:col-span-2 space-y-6">
-//             <Card>
-//               <CardHeader>
-//                 <CardTitle>Project Description</CardTitle>
-//               </CardHeader>
-//               <CardContent>
-//                 <p className="text-gray-700 leading-relaxed">{quote.description}</p>
-
-//                 <div className="mt-6 grid grid-cols-2 gap-4">
-//                   <div>
-//                     <h4 className="font-medium text-gray-900">Technical Requirements</h4>
-//                     <ul className="mt-2 text-sm text-gray-600 space-y-1">
-//                       <li>• 4-layer PCB design</li>
-//                       <li>• High-frequency components</li>
-//                       <li>• BLE connectivity module</li>
-//                       <li>• Temperature sensors integration</li>
-//                     </ul>
-//                   </div>
-//                   <div>
-//                     <h4 className="font-medium text-gray-900">Deliverables</h4>
-//                     <ul className="mt-2 text-sm text-gray-600 space-y-1">
-//                       <li>• PCB design files</li>
-//                       <li>• Assembly documentation</li>
-//                       <li>• Test reports</li>
-//                       <li>• Final assembled units</li>
-//                     </ul>
-//                   </div>
-//                 </div>
-//               </CardContent>
-//             </Card>
-
-//             <Card>
-//               <CardHeader>
-//                 <CardTitle>Project Timeline & Milestones</CardTitle>
-//               </CardHeader>
-//               <CardContent>
-//                 <div className="space-y-4">
-//                   <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-//                     <span>Design Phase</span>
-//                     <span className="text-sm text-gray-600">Week 1-2</span>
-//                   </div>
-//                   <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-//                     <span>PCB Manufacturing</span>
-//                     <span className="text-sm text-gray-600">Week 3-4</span>
-//                   </div>
-//                   <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-//                     <span>Assembly & Testing</span>
-//                     <span className="text-sm text-gray-600">Week 5-6</span>
-//                   </div>
-//                 </div>
-//               </CardContent>
-//             </Card>
-//           </div>
-
-//           {/* Sidebar */}
-//           <div className="space-y-6">
-//             <Card>
-//               <CardHeader>
-//                 <CardTitle>Project Information</CardTitle>
-//               </CardHeader>
-//               <CardContent className="space-y-4">
-//                 <div>
-//                   <span className="text-sm text-gray-500">Quote ID</span>
-//                   <p className="font-medium">{quote.id}</p>
-//                 </div>
-
-//                 <div>
-//                   <span className="text-sm text-gray-500">Budget Range</span>
-//                   <p className="font-medium text-green-600">{quote.budget}</p>
-//                 </div>
-
-//                 <div>
-//                   <span className="text-sm text-gray-500">Posted Date</span>
-//                   <p className="font-medium">{new Date(quote.postedDate).toLocaleDateString()}</p>
-//                 </div>
-
-//                 <div>
-//                   <span className="text-sm text-gray-500">Deadline</span>
-//                   <p className="font-medium">{new Date(quote.deadline).toLocaleDateString()}</p>
-//                 </div>
-
-//                 <div>
-//                   <span className="text-sm text-gray-500">Total Bids</span>
-//                   <p className="font-medium">{quote.bidsCount}</p>
-//                 </div>
-
-//                 <div>
-//                   <span className="text-sm text-gray-500">Category</span>
-//                   <p className="font-medium">{quote.category}</p>
-//                 </div>
-
-//                 <div>
-//                   <span className="text-sm text-gray-500">Complexity</span>
-//                   <p className="font-medium">{quote.complexity}</p>
-//                 </div>
-//               </CardContent>
-//             </Card>
-
-//             <Card>
-//               <CardHeader>
-//                 <CardTitle>Action Required</CardTitle>
-//               </CardHeader>
-//               <CardContent>
-//                 <Button
-//                   className="w-full mb-3"
-//                   onClick={() => setShowBidForm(true)}
-//                   disabled={quote.status === "Closed"}
-//                   text="Submit Bid"
-//                 />
-//                 <Button variant="outline" className="w-full" text="Save to Favorites" />
-//               </CardContent>
-//             </Card>
-//           </div>
-//         </div>
-//       </div>
-//     </DasboardLayout>
-//   );
-// }
-
-// export default EmsBidPage;
-
-
-
-
-
-
-
 import { useEffect, useState } from "react";
-import { useFavoriteQuote } from "@/grahpql/hooks/useFavoriteQuote";
-import { useMyFavoriteQuotes } from "@/grahpql/hooks/useMyFavoriteQuotes";
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import Button from "@/components/ui/Buttons";
-import { Badge } from "@/components/ui/Badge";
-import QuoteBidForm from "@/components/QuoteBidForm";
 import { useNavigate, useParams } from "react-router-dom";
 import DasboardLayout from "@/pages/Dasboard/layout";
+
+import { useFavoriteQuote } from "@/grahpql/hooks/useFavoriteQuote";
+import { useMyFavoriteQuotes } from "@/grahpql/hooks/useMyFavoriteQuotes";
+import { useMyBids } from "@/grahpql/hooks/useMyBids";
 import useSingleQuote from "@/pages/Dasboard/ems/quote/hooks/get-single-quote";
+
+import QuoteBidForm from "@/components/QuoteBidForm";
 import LoaderIcon from "@/components/icons/LoaderIcon";
 import { QuoteType } from "@/__generated__/graphql";
-import { useMyBids } from "@/grahpql/hooks/useMyBids";
 
-const EmsBidPage = () => {
-  const [showBidForm, setShowBidForm] = useState(false);
+const NA = (v: any) => (v === null || v === undefined || v === "" ? "N/A" : v);
 
-  const navigate = useNavigate();
+export default function EmsBidPage() {
   const { id } = useParams<{ id: string }>();
 
-  const { quote, isLoading } = useSingleQuote(id || "");
+  const navigate = useNavigate();
+
+  const { quote, isLoading } = useSingleQuote(id!);
+
+  const { bids } = useMyBids();
   const { addToFavorite, removeFromFavorite } = useFavoriteQuote();
   const { favorites, refetch } = useMyFavoriteQuotes();
 
+  const [showBidForm, setShowBidForm] = useState(false);
   const [isFav, setIsFav] = useState(false);
 
   useEffect(() => {
     if (!quote) return;
-
-    const exists = favorites.some((f) => f.quoteId === quote.quoteId);
-    setIsFav(exists);
+    setIsFav(favorites.some((f) => f.quoteId === quote.quoteId));
   }, [favorites, quote]);
 
   const toggleFavorite = async () => {
-    if (!quote?.quoteId) return;   // ✅ guard
+    if (!quote) return;
 
-    try {
-      if (isFav) {
-        await removeFromFavorite(quote.quoteId);
-        setIsFav(false);
-      } else {
-        await addToFavorite(quote.quoteId);
-        setIsFav(true);
-      }
+    isFav
+      ? await removeFromFavorite(quote.quoteId!)
+      : await addToFavorite(quote.quoteId!);
 
-      refetch();
-    } catch (err) {
-      console.error("Favorite toggle failed", err);
-    }
+
+    setIsFav(!isFav);
+    refetch();
   };
 
-  const { bids } = useMyBids();
-
-  if (isLoading) {
+  if (isLoading)
     return (
       <DasboardLayout>
         <div className="py-40 flex justify-center">
@@ -234,176 +52,193 @@ const EmsBidPage = () => {
         </div>
       </DasboardLayout>
     );
-  }
 
-  if (!quote) {
-    return (
-      <DasboardLayout>
-        <div className="py-20 text-center h-[60vh] flex justify-center items-center">
-          Quote not found
-        </div>
-      </DasboardLayout>
-    );
-  }
+  if (!quote) return null;
 
-  const alreadyBid = bids.some(
-    (bid) => bid.quote.quoteId === quote.quoteId
-  );
+  const alreadyBid = bids.some((b) => b.quote.quoteId === quote.quoteId);
 
-  if (showBidForm) {
-    return (
-      <QuoteBidForm
-        quote={quote}
-        onBack={() => setShowBidForm(false)}
-      />
-    );
-  }
+  if (showBidForm)
+    return <QuoteBidForm quote={quote} onBack={() => setShowBidForm(false)} />;
 
   return (
     <DasboardLayout>
       <div className="p-6 space-y-6">
-        {/* Header */}
+
+        {/* ================= HEADER ================= */}
         <div className="flex items-center gap-4">
-          <Button
-            variant="outline"
+          <button
             onClick={() => navigate("/ems/manage-quote")}
-            text="← Back to Quotes"
-            width="w-full"
-          />
-
-          <h1 className="text-2xl font-bold">{quote.title}</h1>
-
-          <Badge
-            variant={
-              quote.quoteType === QuoteType.FixedQuote ? "default" : "secondary"
-            }
+            className="border px-4 py-2 rounded-lg text-sm"
           >
-            {quote.quoteType === QuoteType.FixedQuote ? "Fixed" : "Open"}
-          </Badge>
+            ← Back to Quotes
+          </button>
 
-          {alreadyBid && (
-            <Badge variant="default" className="bg-green-600 text-white">
-              Bid Submitted
-            </Badge>
-          )}
+          <h1 className="text-2xl font-semibold">{quote.title}</h1>
+
+          <span className="bg-gray-100 text-xs px-3 py-1 rounded-full">
+            {quote.quoteType === QuoteType.FixedQuote ? "Fixed" : "Open"}
+          </span>
         </div>
 
+        {/* ================= INFO CARD ================= */}
+        {/* ================= PROJECT INFO ================= */}
+        <div className="bg-white border rounded-xl shadow-sm p-6 space-y-6">
+
+          <h3 className="font-semibold text-lg">Project Information</h3>
+
+          <div className="grid grid-cols-5 gap-10">
+
+            <Info label="Quote ID" value={quote.quoteId} />
+            <Info label="Budget Range" value={`$${quote.budget || 0}`} />
+            <Info label="Posted Date" value={new Date(quote.createdAt).toLocaleDateString()} />
+            <Info label="Total Bids" value={quote.bids?.length ?? 0} />
+
+            <Info label="Category" value="Open" />
+
+            <Info label="Number of Boards" value={`${quote.pcbBoards || "N/A"} `} />
+            <Info label="Turn Time" value={`${quote.turnTime || "N/A"} Days`} />
+            <Info label="Location" value="California, USA" />
+
+            {/* Services badges */}
+            <div>
+              <p className="text-xs text-gray-500 mb-1">Services</p>
+              <div className="flex gap-2">
+                {quote.quoteMaterials?.map((m: string, i: number) => (
+                  <span
+                    key={i}
+                    className="px-3 py-1 text-xs rounded-full border bg-gray-50"
+                  >
+                    {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+        {/* ================= FILES ================= */}
+        {/* ================= FILES ================= */}
+        <div className="bg-white border rounded-xl shadow-sm p-4 flex gap-4 flex-wrap">
+
+          <FileButton color="blue" text="Gerber Files" />
+          <FileButton color="green" text="BOM" />
+          <FileButton color="purple" text="Assembly Drawings" />
+          <FileButton color="orange" text="Pick & Place" />
+
+        </div>
+
+
+        {/* ================= MAIN GRID ================= */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Content */}
+
+          {/* LEFT */}
           <div className="lg:col-span-2 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Project Description</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 leading-relaxed">
-                  {quote.description}
-                </p>
 
-                <div className="mt-6 grid grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="font-medium text-gray-900">
-                      Technical Requirements
-                    </h4>
-                    <ul className="mt-2 text-sm text-gray-600 space-y-1">
-                      <li>• 4-layer PCB design</li>
-                      <li>• High-frequency components</li>
-                      <li>• BLE connectivity module</li>
-                      <li>• Temperature sensors integration</li>
-                    </ul>
-                  </div>
+            {/* Description */}
+            <Card title="Project Description">
+              <p className="text-gray-700">{NA(quote.description)}</p>
 
-                  <div>
-                    <h4 className="font-medium text-gray-900">Deliverables</h4>
-                    <ul className="mt-2 text-sm text-gray-600 space-y-1">
-                      <li>• PCB design files</li>
-                      <li>• Assembly documentation</li>
-                      <li>• Test reports</li>
-                      <li>• Final assembled units</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
+              <div className="grid grid-cols-2 gap-8 mt-6">
+                <List title="Technical Requirements" items={[]} />
+                <List title="Deliverables" items={[]} />
+              </div>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Project Timeline & Milestones</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                    <span>Design Phase</span>
-                    <span className="text-sm text-gray-600">Week 1-2</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                    <span>PCB Manufacturing</span>
-                    <span className="text-sm text-gray-600">Week 3-4</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                    <span>Assembly & Testing</span>
-                    <span className="text-sm text-gray-600">Week 5-6</span>
-                  </div>
-                </div>
-              </CardContent>
+            {/* Timeline */}
+            <Card title="Project Timeline & Milestones">
+
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
+                <p className="text-xs text-gray-500">Expected Delivery Date</p>
+                <p className="text-lg font-semibold text-orange-600">N/A</p>
+              </div>
+
+              <Timeline label="PCB Manufacturing" week="Week 1-2" color="bg-blue-500" />
+              <Timeline label="Assembly" week="Week 3-4" color="bg-green-500" />
+              <Timeline label="Testing" week="Week 5-6" color="bg-purple-500" />
             </Card>
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Project Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Info label="Quote ID" value={quote.quoteId} />
-                <Info label="Budget Range" value={`$${quote.budget}`} />
-                <Info
-                  label="Posted Date"
-                  value={new Date(quote.createdAt).toLocaleDateString()}
-                />
-                <Info label="Total Bids" value={quote.bids?.length || 0} />
-                <Info
-                  label="Category"
-                  value={
-                    quote.quoteType === QuoteType.FixedQuote ? "Fixed" : "Open"
-                  }
-                />
-              </CardContent>
-            </Card>
+          {/* RIGHT */}
+          <div>
+            <Card title="Action Required">
+              <button
+                disabled={alreadyBid}
+                onClick={() => setShowBidForm(true)}
+                className="w-full bg-orange-600 text-white py-3 rounded-lg mb-3 font-medium disabled:bg-gray-300"
+              >
+                {alreadyBid ? "Bid Submitted" : "Submit Bid"}
+              </button>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Action Required</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Button
-                  className="w-full mb-3"
-                  onClick={() => setShowBidForm(true)}
-                  disabled={alreadyBid}
-                  text={alreadyBid ? "Bid Already Submitted" : "Submit Bid"}
-                />
-
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  text={isFav ? "Remove from Favorites" : "Save to Favorites"}
-                  handleClick={toggleFavorite}
-                />
-              </CardContent>
+              <button
+                onClick={toggleFavorite}
+                className="w-full border border-orange-600 text-orange-600 py-3 rounded-lg"
+              >
+                {isFav ? "Remove from Favorites" : "Save to Favorites"}
+              </button>
             </Card>
           </div>
         </div>
       </div>
     </DasboardLayout>
   );
-};
+}
 
-const Info = ({ label, value }: { label: string; value: any }) => (
-  <div>
-    <span className="text-sm text-gray-500">{label}</span>
-    <p className="font-medium">{value}</p>
+
+/* ================= COMPONENTS ================= */
+
+const Card = ({ title, children }: any) => (
+  <div className="bg-white border rounded-xl shadow-sm p-6">
+    <h2 className="font-semibold mb-4">{title}</h2>
+    {children}
   </div>
 );
 
-export default EmsBidPage;
+const Info = ({ label, value }: any) => (
+  <div>
+    <p className="text-xs text-gray-500">{label}</p>
+    <p className="font-semibold">{value}</p>
+  </div>
+);
+
+
+
+const List = ({ title, items }: any) => (
+  <div>
+    <p className="font-medium mb-2">{title}</p>
+    {items.length ? (
+      items.map((i: string, idx: number) => <p key={idx}>• {i}</p>)
+    ) : (
+      <p className="text-gray-400">N/A</p>
+    )}
+  </div>
+);
+
+const Timeline = ({ label, week, color }: any) => (
+  <div className="flex items-center justify-between bg-gray-50 rounded p-3 mb-2">
+    <div className="flex items-center gap-3">
+      <div className={`w-2 h-2 rounded-full ${color}`} />
+      <span>{label}</span>
+    </div>
+    <span className="text-sm text-gray-500">{week}</span>
+  </div>
+);
+
+const FileButton = ({ text, color }: any) => {
+  const colors: any = {
+    blue: "border-blue-300 text-blue-600 bg-blue-50",
+    green: "border-green-300 text-green-600 bg-green-50",
+    purple: "border-purple-300 text-purple-600 bg-purple-50",
+    orange: "border-orange-300 text-orange-600 bg-orange-50",
+  };
+
+  return (
+    <button
+      className={`flex items-center gap-2 px-5 py-2 rounded-lg border text-sm font-medium ${colors[color]} hover:shadow-sm`}
+    >
+      📄 {text}
+      <span className="ml-2">⬇</span>
+    </button>
+  );
+};

@@ -2,7 +2,7 @@ import { GetQuoteQuery } from "@/__generated__/graphql";
 import PreviewCard from "./Preview";
 import LoaderIcon from "../icons/LoaderIcon";
 
-export default function QuoteView({data, isLoading}: {data: GetQuoteQuery["quote"] | undefined, isLoading: boolean}) {
+export default function QuoteView({ data, isLoading }: { data: GetQuoteQuery["quote"] | undefined, isLoading: boolean }) {
   return (
     <div>
       <div className="border-t py-9 mt-9 flex flex-col gap-4 md:flex-row justify-between">
@@ -26,7 +26,7 @@ export default function QuoteView({data, isLoading}: {data: GetQuoteQuery["quote
             </li>
           </ul>
         </div>
-        
+
       </div>
       {isLoading && (
         <p className="py-20 text-center">
@@ -37,6 +37,7 @@ export default function QuoteView({data, isLoading}: {data: GetQuoteQuery["quote
         <PreviewCard
           title={data?.title || ""}
           quoteMaterials={data?.quoteMaterials ? "Yes" : "No"}
+          quoteMaterialsList={data?.quoteMaterials || []}
           turnTime={data?.turnTime || 0}
           description={data?.description || ""}
           quoteFiles={data?.quoteFiles ?? []}

@@ -1,9 +1,9 @@
 import useQuote from "../hooks";
 import useUpdateQuote from "../../Register/Quote/hooks/update_quote-hooks";
 import { useFormik, Form, FormikProvider } from "formik";
-import { 
-  addToLocalStorage, 
-  getFromLocalStorage, 
+import {
+  addToLocalStorage,
+  getFromLocalStorage,
   // hasAllRequiredPropertiesStrict 
 } from "@/lib/utils";
 import toast from "react-hot-toast";
@@ -17,7 +17,7 @@ import FormInput from "@/components/ui/FormInput";
 import { QuoteType } from "@/__generated__/graphql";
 
 export function PreviewQuote() {
-  const { handleQuote, loading: createLoading  } = useQuote()
+  const { handleQuote, loading: createLoading } = useQuote()
   const { handleCreateQuote: handleUpdateQuote, loading: updateLoading } = useUpdateQuote()
   const navigate = useNavigate()
   const [queryParams] = useSearchParams();
@@ -26,12 +26,12 @@ export function PreviewQuote() {
 
   console.log("PreviewQuote - isQuickQuote:", isQuickQuote, "quoteId:", quoteId);
 
-  const getQuoteData = () =>  {
+  const getQuoteData = () => {
     try {
       const quoteData = getFromLocalStorage("quoteData")
 
       return quoteData
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       return;
     }
@@ -41,7 +41,7 @@ export function PreviewQuote() {
     try {
       const quoteEMSDetail = getFromLocalStorage("quoteEMSDetail")
       return quoteEMSDetail
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       return;
     }
@@ -67,7 +67,7 @@ export function PreviewQuote() {
     },
     onSubmit: async (values) => {
       try {
-        addToLocalStorage("quoteData", 
+        addToLocalStorage("quoteData",
           {
             hasNDA: values.hasNDA,
             quoteType: values.quoteType,
@@ -79,17 +79,17 @@ export function PreviewQuote() {
         const quoteData = getFromLocalStorage("quoteData");
         // const requiredProperties = hasAllRequiredPropertiesStrict(quoteData);
 
-				// if (!requiredProperties) {
+        // if (!requiredProperties) {
         //   toast.error("Please fill in all required fields before submitting. Assign EMS is required.");
         //   return;
         // }
 
         console.log("Submitting quote - isQuickQuote:", isQuickQuote, "quoteId:", quoteId);
-        
+
         if (isQuickQuote && quoteId) {
           // Update existing quick quote - convert from QUICK_QUOTE to OPEN_QUOTE or FIXED_QUOTE
           console.log("Updating quick quote with ID:", quoteId);
-          const result = await handleUpdateQuote({ 
+          const result = await handleUpdateQuote({
             title: quoteData.title,
             description: quoteData.description,
             quoteMaterials: quoteData.quoteMaterials,
@@ -103,9 +103,9 @@ export function PreviewQuote() {
             quoteName: quoteData.quoteName,
             pcbBoards: quoteData.pcbBoards || 0,
           });
-          
+
           console.log("Update result:", result);
-          
+
           if (result) {
             toast.success("Quick quote updated successfully!");
             setIsCongratulationModalOpen(true);
@@ -116,11 +116,11 @@ export function PreviewQuote() {
           await handleQuote({ ...quoteData });
           setIsCongratulationModalOpen(true);
         }
-			} catch (error: unknown) {
-				const errorMessage =
-					error instanceof Error ? error?.message : 'Quote submission failed';
-				toast.error(errorMessage);
-			}
+      } catch (error: unknown) {
+        const errorMessage =
+          error instanceof Error ? error?.message : 'Quote submission failed';
+        toast.error(errorMessage);
+      }
     },
   });
 
@@ -133,11 +133,11 @@ export function PreviewQuote() {
 
   return (
     <>
-      <Congratulation 
-        isOpen={isCongratulationModalOpen} 
-        onClose={() => setIsCongratulationModalOpen(false)} 
+      <Congratulation
+        isOpen={isCongratulationModalOpen}
+        onClose={() => setIsCongratulationModalOpen(false)}
       />
-      
+
       <div className="flex flex-col w-full max-w-4xl mx-auto p-0 bg-white border border-solid border-[#D0D5DD]">
         <div className="text-center border border-solid border-[#D0D5DD] px-4 py-6">
           <h1 className="text-3xl font-semibold text-[#101928] mb-2">{getQuote?.quoteName ?? "PCB Assembly Project"}</h1>
@@ -148,27 +148,32 @@ export function PreviewQuote() {
             <label className="block text-sm font-semibold text-[#101928] mb-2">
               Are you providing parts, boards or stencil?
             </label>
-            <p className="flex gap-4 text-[#101928] text-sm font-medium">
-              {getQuote?.quoteMaterials?.length > 0 ? "Yes" : "No"}
+            <p className="text-[#101928] text-sm font-medium">
+              {getQuote?.quoteMaterials?.length
+                ? `Yes, ${getQuote.quoteMaterials.join(" | ")}`
+                : "No"}
             </p>
+
           </div>
 
           <div className="border border-solid border-[#D0D5DD] px-4 py-2">
             <label className="block text-sm font-semibold mb-2 text-[#101928]">
               Desired Turn Time
             </label>
-            <div className="flex gap-4 text-[#101928] text-sm font-medium">
-              {getQuote?.turnTime?  "Yes" : "No"}
+            <div className="text-[#101928] text-sm font-medium">
+              {getQuote?.turnTime ? `${getQuote.turnTime} Days` : "N/A"}
             </div>
+
           </div>
 
           <div className="border border-solid border-[#D0D5DD] px-4 py-2">
             <label className="block text-sm font-semibold mb-3 text-[#101928]">
               Board Quantity
             </label>
-            <div className="flex gap-4 flex-wrap text-[#101928] text-sm font-medium">
-              Yes
+            <div className="text-[#101928] text-sm font-medium">
+              {getQuote?.pcbBoards ? `${getQuote.pcbBoards} Boards` : "N/A"}
             </div>
+
           </div>
 
           <div className="border border-solid border-[#D0D5DD] px-4 py-2">
@@ -207,11 +212,11 @@ export function PreviewQuote() {
               <label className="block text-sm font-semibold text-[#101928] mb-3">
                 Assigned EMS
               </label>
-              <PreviewQuoteAssignButton 
-                isOpen={isAssignEMSModalOpen} 
+              <PreviewQuoteAssignButton
+                isOpen={isAssignEMSModalOpen}
                 setIsOpen={setIsAssignEMSModalOpen}
                 trigger={
-                  <button 
+                  <button
                     onClick={() => setIsAssignEMSModalOpen(true)}
                     className="flex flex-col items-center gap-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
                   >
@@ -272,12 +277,10 @@ export function PreviewQuote() {
                       }}
                       className="sr-only"
                     />
-                    <div className={`w-11 h-6 rounded-full shadow-inner transition-colors duration-200 ease-in-out ${
-                      formik.values.hasNDA ? 'bg-[#EB5017]' : 'bg-[#E4E7EC]'
-                    }`}>
-                      <div className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-200 ease-in-out ${
-                        formik.values.hasNDA ? 'translate-x-6' : 'translate-x-1'
-                      } mt-1`}></div>
+                    <div className={`w-11 h-6 rounded-full shadow-inner transition-colors duration-200 ease-in-out ${formik.values.hasNDA ? 'bg-[#EB5017]' : 'bg-[#E4E7EC]'
+                      }`}>
+                      <div className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-200 ease-in-out ${formik.values.hasNDA ? 'translate-x-6' : 'translate-x-1'
+                        } mt-1`}></div>
                     </div>
                   </label>
                 </div>
@@ -324,7 +327,7 @@ export function PreviewQuote() {
                                 <li key={list}>• {list}</li>
                               ))}
                             </ul>
-                            
+
                             {/* Budget input for FIXED_QUOTE */}
                             {quoteType.type === "FIXED_QUOTE" && selectedQuoteType === "FIXED_QUOTE" && (
                               <div className="mt-4">
@@ -353,17 +356,17 @@ export function PreviewQuote() {
                 </div>
               </div>
               <div className="mt-4 w-full flex justify-end gap-4">
-                <Button 
-                  text="Previous" 
+                <Button
+                  text="Previous"
                   type="button"
                   background="bg-transparent"
                   color="text-[#000]"
                   handleClick={() => navigate(-1)}
                 />
-                <Button 
-                  text="Submit" 
-                  type="submit" 
-                  isLoading={loading} 
+                <Button
+                  text="Submit"
+                  type="submit"
+                  isLoading={loading}
                 />
               </div>
             </Form>

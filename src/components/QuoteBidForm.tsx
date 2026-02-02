@@ -383,42 +383,90 @@ const QuoteBidForm = ({ quote, onBack }: { quote: any; onBack: () => void }) => 
               </div>
             </CardHeader>
             <CardContent>
+
+              {/* ===== Header Labels (NEW) ===== */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-xs text-gray-500 mb-2 px-1">
+                <span>Item Name</span>
+                <span>Unit Price</span>
+                <span>Quantity</span>
+                <span>Total</span>
+                <span></span>
+              </div>
+
+
               <div className="space-y-4">
-                {pricingItems.map((item, index) => (
-                  <div
-                    key={index}
-                    className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg"
-                  >
-                    <Input
-                      value={item.description}
-                      onChange={(e) => updatePricingItem(index, "description", e.target.value)}
-                      placeholder="Description"
-                    />
+                {pricingItems.map((item, index) => {
+                  const rowTotal =
+                    (Number(item.unitPrice) || 0) *
+                    (Number(item.quantity) || 1);
 
-                    <Input
-                      type="number"
-                      value={item.unitPrice}
-                      onChange={(e) => updatePricingItem(index, "unitPrice", e.target.value)}
-                      placeholder="Unit Price"
-                    />
+                  return (
+                    <div
+                      key={index}
+                      className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 bg-gray-50 rounded-lg"
+                    >
+                      {/* Item */}
+                      <Input
+                        value={item.description}
+                        onChange={(e) =>
+                          updatePricingItem(index, "description", e.target.value)
+                        }
+                        placeholder="Description"
+                      />
 
-                    <Input
-                      type="number"
-                      value={item.quantity}
-                      onChange={(e) => updatePricingItem(index, "quantity", e.target.value)}
-                      placeholder="Qty"
-                    />
+                      {/* Unit Price */}
+                      <Input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        value={item.unitPrice}
+                        onChange={(e) =>
+                          updatePricingItem(
+                            index,
+                            "unitPrice",
+                            Math.max(0, Number(e.target.value)).toString()
+                          )
+                        }
+                        placeholder="Unit Price"
+                      />
 
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => removePricingItem(index)}
-                      text="Remove"
-                      className="text-red-600"
-                    />
-                  </div>
-                ))}
 
+                      {/* Quantity */}
+                      <Input
+                        type="number"
+                        min={1}
+                        step="1"
+                        value={item.quantity}
+                        onChange={(e) =>
+                          updatePricingItem(
+                            index,
+                            "quantity",
+                            Math.max(1, Number(e.target.value)).toString()
+                          )
+                        }
+                        placeholder="Qty"
+                      />
+
+
+                      {/* ===== Total (NEW) ===== */}
+                      <div className="flex items-center font-medium text-gray-700">
+                        ${rowTotal.toFixed(2)}
+                      </div>
+
+                      {/* Remove */}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => removePricingItem(index)}
+                        text="Remove"
+                        className="text-red-600"
+                      />
+                    </div>
+                  );
+                })}
+
+
+                {/* Bottom Total (unchanged) */}
                 <div className="flex justify-end pt-4 border-t">
                   <div className="text-right">
                     <span className="text-sm text-gray-500">Total Estimated Cost: </span>
@@ -428,7 +476,9 @@ const QuoteBidForm = ({ quote, onBack }: { quote: any; onBack: () => void }) => 
                   </div>
                 </div>
               </div>
+
             </CardContent>
+
           </Card>
 
           {/* Additional Notes */}

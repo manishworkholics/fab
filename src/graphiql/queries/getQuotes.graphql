@@ -6,6 +6,8 @@ query GetQuotes($params: FindAllQuotesInput) {
       title
       quoteMaterials
       turnTime
+      pcbBoards
+numberOfBoards
       quoteFiles
       quoteType
       status

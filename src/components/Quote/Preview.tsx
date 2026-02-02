@@ -7,6 +7,7 @@ import { Ems } from "@/__generated__/graphql";
 interface PreviewCardProps {
   title: string;
   quoteMaterials: string;
+  quoteMaterialsList: string[];
   turnTime: number;
   description: string;
   quoteFiles: string[];
@@ -18,7 +19,7 @@ interface PreviewCardProps {
 }
 const PreviewCard = ({
   title,
-  quoteMaterials,
+  quoteMaterialsList,
   turnTime,
   description,
   quoteFiles,
@@ -40,7 +41,13 @@ const PreviewCard = ({
               <h4 className="text-[14px] text-[#101928] mb-1 font-semibold">
                 Are you providing parts, boards or stencil?
               </h4>
-              <p className="text-[14px] text-[#101928]">{quoteMaterials}</p>
+              <p className="text-[14px] text-[#101928]">
+                {quoteMaterialsList?.length
+                  ? `Yes, ${quoteMaterialsList.join(" | ")}`
+                  : "No"}
+              </p>
+
+
             </div>
             <div className="border p-4 mt-2">
               <h4 className="text-[14px] text-[#101928] mb-1 font-semibold">

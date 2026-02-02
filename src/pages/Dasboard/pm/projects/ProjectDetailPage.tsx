@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { ChevronDown, Phone, Mail, ExternalLink } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { ProjectDetailDocument } from "@/__generated__/graphql";
+import { ProjectDetailDocument, ProjectStatus } from "@/__generated__/graphql";
 import LoaderIcon from "@/components/icons/LoaderIcon";
 
 export default function ProjectDetailPage() {
@@ -21,7 +21,7 @@ export default function ProjectDetailPage() {
   if (loading) return <LoaderIcon />;
   if (!project) return <div className="p-10 text-center">Project not found</div>;
 
-  const { quote, pm, ems, purchaseOrder, history } = project;
+  const { quote, pm, ems, purchaseOrder } = project;
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -99,7 +99,7 @@ export default function ProjectDetailPage() {
       </Card>
 
       {/* Project Status */}
-      <Card className="mb-6">
+      {/* <Card className="mb-6">
         <CardContent className="p-6">
           <h2 className="text-lg font-semibold mb-4">Project Status</h2>
 
@@ -122,7 +122,80 @@ export default function ProjectDetailPage() {
             ))}
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
+
+
+      <CardContent className="p-6">
+        <h2 className="text-lg font-semibold mb-6">Project Status</h2>
+
+        {/*
+    ORDER of steps (always visible)
+  */}
+        {(() => {
+          const steps = [
+            { key: ProjectStatus.Assigned, label: "Order Received" },
+            { key: ProjectStatus.InProgress, label: "Preparing your Order" },
+            { key: ProjectStatus.Manufacturing, label: "Manufacturing" },
+            { key: ProjectStatus.Completed, label: "Completed" },
+            { key: ProjectStatus.OnHold, label: "On Hold" },
+          ];
+
+          // current status from backend
+          const currentStatus = project?.status;
+
+          const currentIndex = steps.findIndex(
+            (s) => s.key === currentStatus
+          );
+
+          return (
+            <div className="flex items-center flex-wrap gap-8">
+              {steps.map((step, idx) => {
+                const isCompleted = idx < currentIndex;
+                const isCurrent = idx === currentIndex;
+
+                return (
+                  <div key={step.key} className="flex items-center gap-2">
+
+                    {/* Dot */}
+                    <div
+                      className={`
+                  w-4 h-4 rounded-full flex items-center justify-center
+                  ${isCompleted
+                          ? "bg-green-500"
+                          : isCurrent
+                            ? "border-2 border-orange-500"
+                            : "border-2 border-gray-300"
+                        }
+                `}
+                    >
+                      {isCompleted && (
+                        <div className="w-2 h-2 bg-white rounded-full" />
+                      )}
+                    </div>
+
+                    {/* Label */}
+                    <span
+                      className={`
+                  text-sm font-medium
+                  ${isCompleted
+                          ? "text-green-600"
+                          : isCurrent
+                            ? "text-orange-600"
+                            : "text-gray-400"
+                        }
+                `}
+                    >
+                      {step.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })()}
+      </CardContent>
+
+
 
       {/* Client / EMS Details */}
       <Card>
