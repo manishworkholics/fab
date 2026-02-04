@@ -9,6 +9,7 @@ import OnboardingForm from "./components/OnboardingForm";
 import { deleteFromLocalStorage } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/ui/Buttons";
+import { addToLocalStorage } from "@/lib/utils";
 
 
 export default function CreateQuotePage() {
@@ -34,9 +35,22 @@ export default function CreateQuotePage() {
 
   const [queryParams] = useSearchParams();
 
+
   const isNewUser = queryParams.get("add") === "new-user";
   const quoteId = queryParams.get("quoteId"); // Check if it's a quick quote
   const isQuickQuote = !!quoteId;
+  const assignedEMSId = queryParams.get("assignedEMSId");
+
+  useEffect(() => {
+    if (assignedEMSId) {
+      addToLocalStorage(
+        "quoteData",
+        { assignedEMSId: Number(assignedEMSId) },
+        "merge"
+      );
+    }
+  }, [assignedEMSId]);
+
 
   const [activeStep, setActiveStep] = useState(1);
 
@@ -46,12 +60,21 @@ export default function CreateQuotePage() {
 
   // Clear localStorage when opening the quote creation flow (unless it's a quick quote)
   useEffect(() => {
-    if (!isQuickQuote) {
-      deleteFromLocalStorage("quoteData");
-      deleteFromLocalStorage("quoteEMSDetail");
-    }
-    // For quick quotes, the data is already stored in localStorage by QuoteTable
-  }, [isQuickQuote]);
+  if (!isQuickQuote) {
+    deleteFromLocalStorage("quoteData");
+    deleteFromLocalStorage("quoteEMSDetail");
+  }
+
+  // AFTER clearing, save EMS id
+  if (assignedEMSId) {
+    addToLocalStorage(
+      "quoteData",
+      { assignedEMSId: Number(assignedEMSId) },
+      "merge"
+    );
+  }
+}, [isQuickQuote, assignedEMSId]);
+
 
   const handleStepChange = (step: number) => {
     setActiveStep(step);
@@ -100,7 +123,7 @@ export default function CreateQuotePage() {
             <div className="w-full flex flex-col items-center mt-10">
               {isOnboarding && <OnboardingForm />}
               {creatingQuote && (
-                <QuoteForm handleStepChange={handleStepChange} activeStep={activeStep} />
+                <QuoteForm handleStepChange={handleStepChange} activeStep={activeStep} assignedEMSId={assignedEMSId} />
               )}
             </div>
           </div>

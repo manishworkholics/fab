@@ -11,17 +11,22 @@ import { addToLocalStorage, getFromLocalStorage } from "@/lib/utils";
 type QuoteFormProps = {
   handleStepChange: (step: number) => void;
   activeStep: number;
+  assignedEMSId?: string | null;
 };
 
-export default function QuoteForm({ handleStepChange, activeStep }: QuoteFormProps) {
+export default function QuoteForm({ handleStepChange, activeStep, assignedEMSId, }: QuoteFormProps) {
   const { handleQuote } = useQuote()
   const navigate = useNavigate();
   const quoteData = getFromLocalStorage("quoteData");
   const formik = useFormik({
-    initialValues: { ...initialState, ...quoteData },
+    initialValues: { ...initialState, ...quoteData, assignedEMSId: assignedEMSId ? Number(assignedEMSId) : undefined, },
     onSubmit: async (values: QuoteStateProps) => {
       try {
-        addToLocalStorage("quoteData", values, "merge")
+        addToLocalStorage("quoteData", {
+          ...values,
+          assignedEMSId: assignedEMSId ? Number(assignedEMSId) : values.assignedEMSId,
+        }, "merge")
+
         navigate('/ems/manage-quote')
         await handleQuote({ ...values });
       } catch (error: unknown) {

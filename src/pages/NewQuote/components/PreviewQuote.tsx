@@ -226,7 +226,7 @@ export function PreviewQuote() {
               />
             </div>
             <div className="flex flex-col gap-4 flex-wrap text-[#101928] text-sm p-6">
-              {getQuote?.assignedEMSId || getEMS ? (
+              {/* {getQuote?.assignedEMSId || getEMS ? (
                 <div className="flex">
                   <div className="pr-2">
                     <img
@@ -254,7 +254,49 @@ export function PreviewQuote() {
                 </div>
               ) : (
                 <span className="text-[#101928]">No EMS assigned yet</span>
+              )} */}
+
+              {getQuote?.assignedEMSId || getEMS ? (
+                <div className="flex">
+                  <div className="pr-2">
+                    <img
+                      src={getEMS?.profilePicture ?? "/images/user-img.png"}
+                      alt="EMS Profile"
+                      className="w-10 h-10 rounded-full"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    {/* Name */}
+                    <div className="text-[#3E3838] font-semibold text-lg">
+                      {getEMS?.companyName || "EMS Provider Assigned"}
+                    </div>
+
+                    {/* Location */}
+                    <div className="text-sm text-gray-500">
+                      {getEMS?.location || "Details available after submission"}
+                    </div>
+
+                    {/* Contact */}
+                    {getEMS && (
+                      <div className="flex flex-col p-3 rounded-lg border gap-1">
+                        <div className="flex gap-2">
+                          <Mail size={16} />
+                          <span>{getEMS.email ?? "-"}</span>
+                        </div>
+
+                        <div className="flex gap-2">
+                          <Phone size={16} />
+                          <span>{getEMS.phone ?? "-"}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <span>No EMS assigned yet</span>
               )}
+
             </div>
           </div>
         </div>

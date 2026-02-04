@@ -75,11 +75,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { MapPin } from "lucide-react";
 import EMSCompanyModal from "./EMSCompanyModal";
+import { useNavigate } from "react-router-dom";
+
 
 export default function EMSCard({
+
   company,
   setSelectedCompany, }: any) {
   if (!company) return null;
+  const navigate = useNavigate();
 
   return (
     <Card className="hover:shadow-lg transition-shadow cursor-pointer">
@@ -155,8 +159,9 @@ export default function EMSCard({
               size="sm"
               className="flex-1"
               onClick={() =>
-                console.log("Request Quote clicked", company.id)
+                navigate(`/pm/new-quote?assignedEMSId=${company.id}`)
               }
+
               text={"Request Quote"}
             />
           </div>
