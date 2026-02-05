@@ -17,6 +17,9 @@ export const GET_ALL_EMS = gql`
     EMSAvailabilityStatus
     jobRole
     projectBuildType
+
+    rating        # ⭐ ADD
+  reviewCount   # ⭐ ADD
     }
   }
 `;

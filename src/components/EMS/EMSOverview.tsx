@@ -3,9 +3,12 @@ import { TabsContent } from "../ui/Tabs";
 import { Award, Building } from "lucide-react";
 import { Badge } from "../ui/Badge";
 import { renderStarRating } from "@/utils/helpers/renderStarRatings";
+import { EMSProfile } from "@/types/ems";
+
+
 
 interface EMSCompanyModalProps {
-  company: typeof import("@/utils/constant").emsCompanies[0];
+  company: EMSProfile;
 }
 
 export default function EMSOverview({ company }: EMSCompanyModalProps) {

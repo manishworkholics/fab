@@ -1,4 +1,4 @@
- 
+
 import { useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import toast from 'react-hot-toast';
@@ -7,18 +7,22 @@ import { GetQuoteDocument } from '@/__generated__/graphql';
 
 function useQuoteById(id: string) {
 	const navigate = useNavigate();
-		const [getQuote, { loading: isLoading, error, data }] = useLazyQuery(
+	const [getQuote, { loading: isLoading, error, data }] = useLazyQuery(
 		GetQuoteDocument,
+		{
+			fetchPolicy: "network-only", // 🔥 ADD THIS
+		}
 	);
 
 	useEffect(() => {
 		if (!id) return;
-		getQuote({ variables: { quoteId: id }});  
+		getQuote({ variables: { quoteId: id } });
 	}, [id, getQuote]);
 	useEffect(() => {
 		if (error) {
 			toast.error(error.message || 'An error occurred while fetching the quote.');
-			navigate('/ems/manage-quote')}
+			navigate('/ems/manage-quote')
+		}
 	}, [error]);
 
 	return {

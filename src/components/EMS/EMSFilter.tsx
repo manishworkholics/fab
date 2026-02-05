@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/Select";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Search } from "lucide-react";
-import { states, ratings } from "@/utils/constant";
+import { ratings } from "@/utils/constant";
 
 type EMSFiltersProps = {
-  selectedState: string;
-  setSelectedState: (state: string) => void;
+  selectedLocation: string;
+  locations: string[];
+  setSelectedLocation: (state: string) => void;
   selectedRating: string;
   setSelectedRating: (rating: string) => void;
   searchQuery: string;
@@ -21,8 +22,9 @@ type EMSFiltersProps = {
 };
 
 export default function EMSFilters({
-  selectedState,
-  setSelectedState,
+  locations,
+  selectedLocation,
+  setSelectedLocation,
   selectedRating,
   setSelectedRating,
   searchQuery,
@@ -44,18 +46,20 @@ export default function EMSFilters({
               />
             </div>
           </div>
-          <Select value={selectedState} onValueChange={setSelectedState}>
+          <Select value={selectedLocation} onValueChange={setSelectedLocation}>
             <SelectTrigger className="w-48">
-              <SelectValue placeholder="Select State" />
+              <SelectValue placeholder="Select Location" />
             </SelectTrigger>
+
             <SelectContent>
-              {states.map((state) => (
-                <SelectItem key={state} value={state}>
-                  {state}
+              {locations.map((loc) => (
+                <SelectItem key={loc} value={loc}>
+                  {loc}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+
           <Select value={selectedRating} onValueChange={setSelectedRating}>
             <SelectTrigger className="w-48">
               <SelectValue placeholder="Filter by Rating" />

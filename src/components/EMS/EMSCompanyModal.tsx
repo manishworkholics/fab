@@ -7,19 +7,23 @@ import {
 } from "@/components/ui/Dialog";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import Button from "@/components/ui/Buttons";
-import { FileText, Phone, Mail } from "lucide-react";
+// import { FileText, Phone, Mail } from "lucide-react";
 import EMSOverview from "./EMSOverview";
 import EMSCapabilities from "./EMSCapabilities";
 import EMSEquipments from "./EMSEquipment";
 import EMSReviews from "./EMSReviews";
+import { mapEMSProfile } from "@/utils/mappers/mapEMSProfile";
+import { EMSProfile } from "@/types/ems";
 
 interface EMSCompanyModalProps {
-  company: typeof import("@/utils/constant").emsCompanies[0];
+  company: EMSProfile;
   setSelectedCompany: (company: any) => void;
 }
 
 export default function EMSCompanyModal({ company, setSelectedCompany }: EMSCompanyModalProps) {
   if (!company) return null;
+
+  const mappedCompany = mapEMSProfile(company);
 
   return (
     <Dialog>
@@ -29,12 +33,12 @@ export default function EMSCompanyModal({ company, setSelectedCompany }: EMSComp
           text={"View Profile"}
           size="sm"
           className="flex-1"
-          onClick={() => setSelectedCompany(company)}
+          onClick={() => setSelectedCompany(mappedCompany)}
         />
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl">{company.name}</DialogTitle>
+          <DialogTitle className="text-xl">{mappedCompany.name}</DialogTitle>
         </DialogHeader>
 
         <Tabs defaultValue="overview" className="mt-4">
@@ -45,13 +49,13 @@ export default function EMSCompanyModal({ company, setSelectedCompany }: EMSComp
             <TabsTrigger value="reviews">Reviews</TabsTrigger>
           </TabsList>
 
-          <EMSOverview company={company} />
-          <EMSCapabilities company={company} />
-          <EMSEquipments company={company} />
-          <EMSReviews company={company} />
+          <EMSOverview company={mappedCompany} />
+          <EMSCapabilities company={mappedCompany} />
+          <EMSEquipments company={mappedCompany} />
+          <EMSReviews company={mappedCompany} />
         </Tabs>
 
-        <div className="flex gap-2 mt-6 pt-4 border-t">
+        {/* <div className="flex gap-2 mt-6 pt-4 border-t">
           <Button
             text="Request Quote"
             className="flex-1 flex items-center gap-2 w-full"
@@ -72,7 +76,7 @@ export default function EMSCompanyModal({ company, setSelectedCompany }: EMSComp
             onClick={() => console.log("Email clicked")}
             variant="outline"
           />
-        </div>
+        </div> */}
       </DialogContent>
     </Dialog>
   );

@@ -92,6 +92,12 @@ export type CreateQuoteInput = {
   turnTime: Scalars['Float']['input'];
 };
 
+export type CreateReviewInput = {
+  comment: Scalars['String']['input'];
+  emsId: Scalars['Int']['input'];
+  rating: Scalars['Int']['input'];
+};
+
 export type DetailedBidInput = {
   additionalNotes?: InputMaybe<Scalars['String']['input']>;
   estimatedTimeline?: InputMaybe<Scalars['String']['input']>;
@@ -174,6 +180,8 @@ export type EmsProfileDto = {
   location?: Maybe<Scalars['String']['output']>;
   manufacturingCapabilities?: Maybe<Array<Scalars['String']['output']>>;
   projectBuildType?: Maybe<ProjectBuildType>;
+  rating?: Maybe<Scalars['Float']['output']>;
+  reviewCount?: Maybe<Scalars['Int']['output']>;
   specialties?: Maybe<Array<Scalars['String']['output']>>;
 };
 
@@ -200,6 +208,7 @@ export type Mutation = {
   archiveQuote: BasicResponse;
   completeEMSProfile: Scalars['Boolean']['output'];
   createQuote: Quote;
+  createReview: ReviewType;
   deleteQuote: BasicResponse;
   login: AuthResponse;
   logout: BasicResponse;
@@ -239,6 +248,12 @@ export type MutationCompleteEmsProfileArgs = {
 
 export type MutationCreateQuoteArgs = {
   createQuoteInput: CreateQuoteInput;
+};
+
+
+export type MutationCreateReviewArgs = {
+  input: CreateReviewInput;
+  pmId: Scalars['Int']['input'];
 };
 
 
@@ -468,6 +483,8 @@ export type Query = {
   emsManufacturersOnly: Array<EmsManufacturer>;
   emsOpenQuotes: Array<Quote>;
   emsProjects: Array<ProjectDto>;
+  emsReviewStats: ReviewStatsType;
+  emsReviews: Array<ReviewType>;
   /** Find EMS suppliers by location */
   emsSuppliersByLocation: Array<EmsManufacturer>;
   /** Get all EMS suppliers only (excludes pure manufacturers) */
@@ -525,6 +542,16 @@ export type QueryEmsManufacturersByLocationArgs = {
 
 export type QueryEmsManufacturersByLocationAndTypeArgs = {
   location: Scalars['String']['input'];
+};
+
+
+export type QueryEmsReviewStatsArgs = {
+  emsId: Scalars['Int']['input'];
+};
+
+
+export type QueryEmsReviewsArgs = {
+  emsId: Scalars['Int']['input'];
 };
 
 
@@ -668,6 +695,23 @@ export type RegisterInput = {
   phone?: InputMaybe<Scalars['String']['input']>;
   role: UserRole;
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ReviewStatsType = {
+  __typename?: 'ReviewStatsType';
+  averageRating: Scalars['Float']['output'];
+  reviewCount: Scalars['Int']['output'];
+};
+
+export type ReviewType = {
+  __typename?: 'ReviewType';
+  comment: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  emsId: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  pmId: Scalars['Int']['output'];
+  rating: Scalars['Int']['output'];
+  reviewerName?: Maybe<Scalars['String']['output']>;
 };
 
 /** Sort by */

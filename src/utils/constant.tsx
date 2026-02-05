@@ -145,7 +145,7 @@ export const ndaDocuments = [
 ];
 
 export const states = ["All States", "California", "Texas", "Massachusetts", "Illinois", "Florida"];
-export const ratings = ["All Ratings", "4.5+ Stars", "4.0+ Stars", "3.5+ Stars"];
+export const ratings = ["All Ratings", "4+ Stars", "3+ Stars", "2+ Stars", "1+ Stars", "0+ Stars"];
 export const contactsData = [
   {
     id: "1",
@@ -1115,7 +1115,7 @@ export const integrationStats = [
     name: "reduction in admin time via connected PO & signature tools",
   },
   {
-   id: 2,
+    id: 2,
     value: "100%",
     name: "traceability on design-to-order process across systems",
   },
@@ -1125,7 +1125,7 @@ export const integrationStats = [
     name: "faster BOM updates with live distributor feedst",
   },
   {
-   id: 4,
+    id: 4,
     value: "Up to 35%",
     name: " payroll time saved per technician/montt",
   },
