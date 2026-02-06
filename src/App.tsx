@@ -30,13 +30,15 @@ import IssuePOForm from "./components/Quote/PurchasingOrder/IssuePOForm";
 import PurchaseManager from "./pages/Customers/PurchaseManager";
 import DesignEngineers from "./pages/Customers/DesignEngineers";
 import ContractManufacturers from "./pages/Customers/ContractManufacturers";
-import EMSProfile from "./pages/EMSProfile";
+import EMSProfile from "./pages/EMSProfile/CompleteProfile";
 
 import BidComparisonPage from "./pages/Dasboard/pm/rfq/[quoteId]/bids";
 import POPage from "./pages/Dasboard/pm/po/[quoteId]";
 import EMSBidsPage from "./pages/Dasboard/ems/bids";
 import ProjectDetailPage from "./pages/Dasboard/pm/projects/ProjectDetailPage";
 import EmsProjectDetailPage from "./pages/Dasboard/ems/project/EmsProjectDetailPage";
+import ProfilePage from "./pages/Dasboard/ems/profile";
+import ChangePasswordPage from "./pages/Dasboard/ems/change-password";
 
 
 function App() {
@@ -89,6 +91,8 @@ function App() {
           <Route path="/view-ems" element={<EMSView />} />
           <Route path="/ems/manage-quote/:id/bid" element={<EmsBidPage />} />
           <Route path="/ems/complete-profile" element={<EMSProfile />} />
+          <Route path="/ems/view-profile" element={<ProfilePage />} />
+          <Route path="/ems/change-password" element={<ChangePasswordPage />} />
           {/* BOM Checker Routes */}
           <Route path="/bom-checker" element={<BomUpload />} />
         </Route>

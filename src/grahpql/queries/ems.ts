@@ -23,3 +23,24 @@ export const GET_ALL_EMS = gql`
     }
   }
 `;
+
+
+export const GET_FULL_EMS_DETAIL_BY_ID = gql`
+  query GetFullEMSDetailById($id: Int!) {
+    getFullEMSDetailById(id: $id) {
+      companyName
+      location
+      bio
+      establishedYear
+      employeeRange
+      certifications
+      specialties
+      manufacturingCapabilities
+      equipmentList
+      facilityVideoUrl
+      jobRole
+      projectBuildType
+      EMSAvailabilityStatus
+      }
+  }
+`;
