@@ -39,6 +39,7 @@ import ProjectDetailPage from "./pages/Dasboard/pm/projects/ProjectDetailPage";
 import EmsProjectDetailPage from "./pages/Dasboard/ems/project/EmsProjectDetailPage";
 import ProfilePage from "./pages/Dasboard/ems/profile";
 import ChangePasswordPage from "./pages/Dasboard/ems/change-password";
+import ContactUs from "./pages/ContactUs";
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
         <Route path="/purchase-manager" element={<PurchaseManager />} />
         <Route path="/design-engineer" element={<DesignEngineers />} />
         <Route path="/ems-providers" element={<ContractManufacturers />} />
+        <Route path="/contact-us" element={<ContactUs />} />
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/quote" element={<Preview />} />

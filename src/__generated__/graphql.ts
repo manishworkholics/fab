@@ -206,6 +206,7 @@ export type Mutation = {
   acceptQuoteBid: ProjectDto;
   addToFavorites: Scalars['Boolean']['output'];
   archiveQuote: BasicResponse;
+  changePassword: Scalars['Boolean']['output'];
   completeEMSProfile: Scalars['Boolean']['output'];
   createQuote: Quote;
   createReview: ReviewType;
@@ -238,6 +239,12 @@ export type MutationAddToFavoritesArgs = {
 
 export type MutationArchiveQuoteArgs = {
   quoteId: Scalars['String']['input'];
+};
+
+
+export type MutationChangePasswordArgs = {
+  newPassword: Scalars['String']['input'];
+  oldPassword: Scalars['String']['input'];
 };
 
 
@@ -492,6 +499,7 @@ export type Query = {
   findAllCompanies: Array<Company>;
   getAllEMS: Array<EmsProfileDto>;
   getEMSById?: Maybe<EmsProfileDto>;
+  getFullEMSDetailById?: Maybe<EmsProfileDto>;
   getPurchaseOrder: PurchaseOrder;
   getPurchaseOrderByQuote?: Maybe<PurchaseOrderDto>;
   isFavorite: Scalars['Boolean']['output'];
@@ -566,6 +574,11 @@ export type QueryFindAllCompaniesArgs = {
 
 
 export type QueryGetEmsByIdArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type QueryGetFullEmsDetailByIdArgs = {
   id: Scalars['Int']['input'];
 };
 

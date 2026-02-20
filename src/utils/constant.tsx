@@ -848,7 +848,7 @@ export const navBarItems = [
     title: "Company",
     dropdown: [
       { link: "", name: "About" },
-      { link: "", name: "Contact Us" },
+      { link: "/contact-us", name: "Contact Us" },
       { link: "", name: "Team" },
       { link: "", name: "Careers" },
       { link: "", name: "Support  & FAQs" },
