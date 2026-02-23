@@ -122,7 +122,11 @@ export default function EmsBidPage() {
         {/* ================= FILES ================= */}
         <div className="bg-white border rounded-xl shadow-sm p-4 flex gap-4 flex-wrap">
 
-          <FileButton color="blue" text="Gerber Files" />
+          <FileButton
+            color="blue"
+            text="Gerber Files"
+            files={quote.quoteFiles}
+          />
           <FileButton color="green" text="BOM" />
           <FileButton color="purple" text="Assembly Drawings" />
           <FileButton color="orange" text="Pick & Place" />
@@ -225,7 +229,7 @@ const Timeline = ({ label, week, color }: any) => (
   </div>
 );
 
-const FileButton = ({ text, color }: any) => {
+const FileButton = ({ text, color, files = [] }: any) => {
   const colors: any = {
     blue: "border-blue-300 text-blue-600 bg-blue-50",
     green: "border-green-300 text-green-600 bg-green-50",
@@ -233,12 +237,42 @@ const FileButton = ({ text, color }: any) => {
     orange: "border-orange-300 text-orange-600 bg-orange-50",
   };
 
+  const handleDownload = (fileName: string) => {
+    const baseUrl = import.meta.env.VITE_FILE_BASE_URL; 
+    // example: http://localhost:4000/uploads
+
+    const fileUrl = `${baseUrl}/${fileName}`;
+
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  if (!files.length)
+    return (
+      <button
+        disabled
+        className={`px-5 py-2 rounded-lg border text-sm font-medium opacity-50 ${colors[color]}`}
+      >
+        📄 {text}
+      </button>
+    );
+
   return (
-    <button
-      className={`flex items-center gap-2 px-5 py-2 rounded-lg border text-sm font-medium ${colors[color]} hover:shadow-sm`}
-    >
-      📄 {text}
-      <span className="ml-2">⬇</span>
-    </button>
+    <>
+      {files.map((file: string, index: number) => (
+        <button
+          key={index}
+          onClick={() => handleDownload(file)}
+          className={`flex items-center gap-2 px-5 py-2 rounded-lg border text-sm font-medium ${colors[color]} hover:shadow-sm`}
+        >
+          📄 {file}
+          <span className="ml-2">⬇</span>
+        </button>
+      ))}
+    </>
   );
 };
