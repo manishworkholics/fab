@@ -48,12 +48,11 @@ const SelectManufacturer = ({
           <button
             onClick={() => hasEMSUsers && setOpen(!open)}
             disabled={!hasEMSUsers}
-            className={`w-full text-left border px-4 py-2 rounded-md shadow-sm focus:outline-none flex justify-between items-center ${
-              !hasEMSUsers ? "bg-gray-100 cursor-not-allowed text-gray-500" : ""
-            }`}>
+            className={`w-full text-left border px-4 py-2 rounded-md shadow-sm focus:outline-none flex justify-between items-center ${!hasEMSUsers ? "bg-gray-100 cursor-not-allowed text-gray-500" : ""
+              }`}>
             {hasEMSUsers ? (
               <>
-                {selected?.firstName} {selected?.lastName}
+                {selected?.firstName} {selected?.lastName} {selected?.email}
                 <span className="ml-2">&#x25BC;</span>
               </>
             ) : (
@@ -62,7 +61,7 @@ const SelectManufacturer = ({
           </button>
 
           {open && hasEMSUsers && (
-            <ul className="absolute z-10 w-full bg-white border mt-1 rounded-md shadow-md max-h-60 overflow-y-auto">
+            <ul className="absolute z-10 w-full bg-white border mt-1 rounded-md shadow-md max-h-96 overflow-y-auto">
               {emUsers.map((m: Ems, index: number) => (
                 <li
                   key={index}
@@ -70,14 +69,13 @@ const SelectManufacturer = ({
                     setSelected(m);
                     setOpen(false);
                   }}
-                  className={`px-4 py-2 cursor-pointer hover:bg-blue-100 ${
-                    selected?.firstName === m.firstName &&
-                    selected?.location === m.location
+                  className={`px-4 py-2 cursor-pointer hover:bg-blue-100 ${selected?.firstName === m.firstName &&
+                      selected?.location === m.location
                       ? "bg-blue-100"
                       : ""
-                  }`}>
+                    }`}>
                   <span className="font-semibold">
-                    {m.firstName} {m.lastName}
+                    {m.firstName} {m.lastName} {m.email}
                   </span>
                   <br />
                   <span className="italic text-sm text-gray-600">
@@ -87,7 +85,7 @@ const SelectManufacturer = ({
               ))}
             </ul>
           )}
-          
+
           {!hasEMSUsers && (
             <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
               <p className="text-sm text-yellow-800">
